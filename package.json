@@ -1,0 +1,23 @@
+{
+  "name": "firefox-command",
+  "version": "0.1.0",
+  "description": "Firefox extension for remote browser control by coding agents",
+  "type": "module",
+  "scripts": {
+    "start": "node native-host/host.js",
+    "lint": "eslint .",
+    "build": "echo 'Build script TBD'"
+  },
+  "keywords": [
+    "firefox",
+    "extension",
+    "browser-automation",
+    "remote-control",
+    "coding-agent"
+  ],
+  "author": "Titouan Mathis",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

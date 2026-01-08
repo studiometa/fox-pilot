@@ -1,0 +1,13 @@
+{
+  "name": "firefox-command-native-host",
+  "version": "0.1.0",
+  "description": "Native messaging host for Firefox Command extension",
+  "type": "module",
+  "main": "host.js",
+  "scripts": {
+    "start": "node host.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.0"
+  }
+}

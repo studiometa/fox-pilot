@@ -1,0 +1,7 @@
+{
+  "name": "firefox_command",
+  "description": "Firefox Command native messaging host",
+  "path": "/REPLACE/WITH/ABSOLUTE/PATH/TO/native-host/host.js",
+  "type": "stdio",
+  "allowed_extensions": ["firefox-command@example.com"]
+}
