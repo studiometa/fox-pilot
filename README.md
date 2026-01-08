@@ -1,4 +1,4 @@
-# FoxPilot
+# Fox Pilot
 
 Extension Firefox permettant le contrôle à distance du navigateur par des agents de code (Claude, Cursor, etc.).
 

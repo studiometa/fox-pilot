@@ -42,7 +42,7 @@ Exemple de manifeste configuré :
 ```json
 {
   "name": "foxpilot",
-  "description": "FoxPilot native messaging host",
+  "description": "Fox Pilot native messaging host",
   "path": "/Users/votre-nom/Lab/foxpilot/native-host/host.js",
   "type": "stdio",
   "allowed_extensions": ["foxpilot@example.com"]

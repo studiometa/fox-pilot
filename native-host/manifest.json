@@ -1,7 +1,7 @@
 {
-  "name": "foxpilot",
-  "description": "FoxPilot native messaging host",
+  "name": "fox_pilot",
+  "description": "Fox Pilot native messaging host",
   "path": "/REPLACE/WITH/ABSOLUTE/PATH/TO/native-host/host.js",
   "type": "stdio",
-  "allowed_extensions": ["foxpilot@ikko.fr"]
+  "allowed_extensions": ["fox-pilot@ikko.fr"]
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * FoxPilot CLI
+ * Fox Pilot CLI
  *
  * Commands:
  *   install  - Register native messaging host and open extension page
@@ -19,8 +19,8 @@ import { spawn, exec } from 'child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, '..');
 
-const HOST_NAME = 'foxpilot';
-const EXTENSION_ID = 'foxpilot@ikko.fr';
+const HOST_NAME = 'fox_pilot';
+const EXTENSION_ID = 'fox-pilot@ikko.fr';
 const ADDON_URL = 'https://addons.mozilla.org/firefox/addon/foxpilot/';
 const PORT = 9222;
 
@@ -64,7 +64,7 @@ function openUrl(url) {
 // =============================================================================
 
 function install() {
-  console.log('🦊 Installing FoxPilot...\n');
+  console.log('🦊 Installing Fox Pilot...\n');
 
   const hostsDir = getNativeHostsDir();
   const manifestPath = getManifestPath();
@@ -81,7 +81,7 @@ function install() {
   // Create manifest
   const manifest = {
     name: HOST_NAME,
-    description: 'FoxPilot native messaging host',
+    description: 'Fox Pilot native messaging host',
     path: hostPath,
     type: 'stdio',
     allowed_extensions: [EXTENSION_ID],
@@ -117,12 +117,12 @@ function install() {
 
   console.log('📋 Next steps:');
   console.log('   1. Click "Add to Firefox" on the add-ons page');
-  console.log('   2. Click the FoxPilot icon in toolbar to verify connection');
+  console.log('   2. Click the Fox Pilot icon in toolbar to verify connection');
   console.log('');
 }
 
 function uninstall() {
-  console.log('🦊 Uninstalling FoxPilot...\n');
+  console.log('🦊 Uninstalling Fox Pilot...\n');
 
   const manifestPath = getManifestPath();
 
@@ -142,7 +142,7 @@ function uninstall() {
 }
 
 function start() {
-  console.log('🦊 Starting FoxPilot server...\n');
+  console.log('🦊 Starting Fox Pilot server...\n');
 
   const hostPath = join(packageRoot, 'native-host', 'host.js');
 
@@ -165,7 +165,7 @@ function start() {
 }
 
 async function status() {
-  console.log('🦊 FoxPilot Status\n');
+  console.log('🦊 Fox Pilot Status\n');
 
   // Check native host
   const manifestPath = getManifestPath();
@@ -180,8 +180,8 @@ async function status() {
   console.log(`\nWebSocket server (port ${PORT}):`);
 
   try {
-    const { FoxPilotClient } = await import('../client/foxpilot-client.js');
-    const client = new FoxPilotClient();
+    const { Fox PilotClient } = await import('../client/foxpilot-client.js');
+    const client = new Fox PilotClient();
     
     await Promise.race([
       client.connect(),
@@ -210,7 +210,7 @@ async function status() {
 
 function help() {
   console.log(`
-🦊 FoxPilot - Remote Firefox control for coding agents
+🦊 Fox Pilot - Remote Firefox control for coding agents
 
 Usage: npx foxpilot <command>
 

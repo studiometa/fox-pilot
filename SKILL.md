@@ -3,7 +3,7 @@ name: foxpilot
 description: Control Firefox browser remotely via WebSocket. Use when users ask to automate Firefox, navigate websites in Firefox, fill forms, take screenshots, extract web data, or test web apps in Firefox specifically. Trigger phrases include "in Firefox", "open in Firefox", "Firefox automation", or any browser task where Firefox is preferred over Chromium.
 ---
 
-# FoxPilot Skill
+# Fox Pilot Skill
 
 Control Firefox browser remotely via WebSocket API. The extension must be installed and running in Firefox.
 
@@ -20,7 +20,7 @@ npx foxpilot install
 
 This will:
 1. Register the native messaging host
-2. Open the Firefox Add-ons page for FoxPilot
+2. Open the Firefox Add-ons page for Fox Pilot
 
 Just click "Add to Firefox" when the page opens.
 
@@ -30,7 +30,7 @@ Just click "Add to Firefox" when the page opens.
 npx foxpilot status
 ```
 
-Or click the FoxPilot icon in Firefox toolbar - it should show "Connected".
+Or click the Fox Pilot icon in Firefox toolbar - it should show "Connected".
 
 ### Other commands
 
@@ -54,9 +54,9 @@ npm install foxpilot      # Local install
 Then import and use:
 
 ```javascript
-import { FoxPilotClient } from 'foxpilot';
+import { Fox PilotClient } from 'foxpilot';
 
-const client = new FoxPilotClient();
+const client = new Fox PilotClient();
 await client.connect();
 
 await client.navigate('https://example.com');
@@ -73,8 +73,8 @@ client.disconnect();
 
 ```bash
 node --input-type=module -e "
-import { FoxPilotClient } from 'foxpilot';
-const client = new FoxPilotClient();
+import { Fox PilotClient } from 'foxpilot';
+const client = new Fox PilotClient();
 await client.connect();
 await client.navigate('https://example.com');
 console.log(await client.getTitle());
@@ -87,9 +87,9 @@ client.disconnect();
 ### Connection
 
 ```javascript
-import { FoxPilotClient } from 'foxpilot';
+import { Fox PilotClient } from 'foxpilot';
 
-const client = new FoxPilotClient({
+const client = new Fox PilotClient({
   url: 'ws://localhost:9222',           // Default
   token: process.env.FOXPILOT_TOKEN     // Optional auth token
 });
@@ -169,9 +169,9 @@ await client.waitForSelector('.loaded', 10000);       // Wait for element (timeo
 
 ```bash
 node <<'EOF'
-import { FoxPilotClient } from 'foxpilot';
+import { Fox PilotClient } from 'foxpilot';
 
-const client = new FoxPilotClient();
+const client = new Fox PilotClient();
 await client.connect();
 
 await client.navigate('https://news.ycombinator.com');
@@ -193,9 +193,9 @@ EOF
 
 ```bash
 node <<'EOF'
-import { FoxPilotClient } from 'foxpilot';
+import { Fox PilotClient } from 'foxpilot';
 
-const client = new FoxPilotClient();
+const client = new Fox PilotClient();
 await client.connect();
 
 await client.navigate('https://example.com/login');
@@ -217,10 +217,10 @@ EOF
 
 ```bash
 node <<'EOF'
-import { FoxPilotClient } from 'foxpilot';
+import { Fox PilotClient } from 'foxpilot';
 import { writeFileSync } from 'fs';
 
-const client = new FoxPilotClient();
+const client = new Fox PilotClient();
 await client.connect();
 
 await client.navigate('https://example.com');
@@ -239,9 +239,9 @@ EOF
 
 ```bash
 node <<'EOF'
-import { FoxPilotClient } from 'foxpilot';
+import { Fox PilotClient } from 'foxpilot';
 
-const client = new FoxPilotClient();
+const client = new Fox PilotClient();
 await client.connect();
 
 // Open two tabs
@@ -289,7 +289,7 @@ Error codes:
 
 Check native host logs:
 ```bash
-cat /tmp/foxpilot.log
+cat /tmp/fox-pilot.log
 ```
 
 Check if WebSocket server is running:
@@ -301,16 +301,16 @@ Restart connection:
 1. Kill existing host: `pkill -f foxpilot`
 2. Restart Firefox or disable/enable the extension
 
-## FoxPilot vs dev-browser
+## Fox Pilot vs dev-browser
 
-| Feature | FoxPilot | dev-browser |
+| Feature | Fox Pilot | dev-browser |
 |---------|----------|-------------|
 | Browser | Firefox | Chromium |
 | Setup | Extension + native host | Clone + npm install |
 | Persistence | Browser stays open | Server keeps pages |
 | Use case | Firefox-specific testing | General automation |
 
-Use FoxPilot when:
+Use Fox Pilot when:
 - You need Firefox specifically
 - Testing Firefox compatibility
 - User prefers Firefox

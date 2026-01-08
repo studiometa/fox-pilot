@@ -1,4 +1,4 @@
-# FoxPilot - Claude Guidelines
+# Fox Pilot - Claude Guidelines
 
 ## Project Overview
 
@@ -52,5 +52,5 @@ node examples/basic-usage.js
 ## Debugging
 
 - Extension logs: Firefox DevTools (about:debugging → Inspect)
-- Native host logs: `/tmp/foxpilot.log`
+- Native host logs: `/tmp/fox-pilot.log`
 - Check port: `lsof -i :9222`

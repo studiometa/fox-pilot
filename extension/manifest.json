@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "FoxPilot",
+  "name": "Fox Pilot",
   "version": "0.1.0",
   "description": "Remote browser control for coding agents",
   "author": "Titouan Mathis",
@@ -37,13 +37,13 @@
       "48": "icons/icon-48.png",
       "96": "icons/icon-96.png"
     },
-    "default_title": "FoxPilot",
+    "default_title": "Fox Pilot",
     "default_popup": "popup/popup.html"
   },
 
   "browser_specific_settings": {
     "gecko": {
-      "id": "foxpilot@ikko.fr",
+      "id": "fox-pilot@ikko.fr",
       "strict_min_version": "109.0"
     }
   }

@@ -5,7 +5,7 @@
  * Acts as the central hub for all browser control operations.
  */
 
-const NATIVE_HOST_NAME = 'foxpilot';
+const NATIVE_HOST_NAME = 'fox_pilot';
 
 let nativePort = null;
 let isConnected = false;
