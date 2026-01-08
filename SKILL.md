@@ -8,7 +8,7 @@ description: Control Firefox browser remotely via WebSocket. Use when users ask 
 Control Firefox browser remotely via WebSocket API. The extension must be installed and running in Firefox.
 
 **Extension:** https://addons.mozilla.org/firefox/addon/foxpilot/
-**Source:** https://github.com/anthropics/foxpilot
+**Source:** https://github.com/studiometa/fox-pilot
 
 ## Setup
 

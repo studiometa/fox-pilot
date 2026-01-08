@@ -3,5 +3,5 @@
   "description": "FoxPilot native messaging host",
   "path": "/REPLACE/WITH/ABSOLUTE/PATH/TO/native-host/host.js",
   "type": "stdio",
-  "allowed_extensions": ["foxpilot@anthropic.com"]
+  "allowed_extensions": ["foxpilot@ikko.fr"]
 }

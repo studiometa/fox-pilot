@@ -16,7 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, '..');
 
 const HOST_NAME = 'foxpilot';
-const EXTENSION_ID = 'foxpilot@anthropic.com';
+const EXTENSION_ID = 'foxpilot@ikko.fr';
 
 /**
  * Get the native messaging hosts directory for the current OS

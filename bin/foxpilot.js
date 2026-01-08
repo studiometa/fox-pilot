@@ -20,7 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, '..');
 
 const HOST_NAME = 'foxpilot';
-const EXTENSION_ID = 'foxpilot@anthropic.com';
+const EXTENSION_ID = 'foxpilot@ikko.fr';
 const ADDON_URL = 'https://addons.mozilla.org/firefox/addon/foxpilot/';
 const PORT = 9222;
 

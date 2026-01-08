@@ -37,9 +37,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anthropics/foxpilot.git"
+    "url": "https://github.com/studiometa/fox-pilot.git"
   },
-  "homepage": "https://github.com/anthropics/foxpilot#readme",
+  "homepage": "https://github.com/studiometa/fox-pilot#readme",
   "engines": {
     "node": ">=18.0.0"
   },

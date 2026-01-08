@@ -43,7 +43,7 @@
 
   "browser_specific_settings": {
     "gecko": {
-      "id": "foxpilot@anthropic.com",
+      "id": "foxpilot@ikko.fr",
       "strict_min_version": "109.0"
     }
   }
