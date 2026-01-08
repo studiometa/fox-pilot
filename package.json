@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node native-host/host.js",
+    "install-host": "node scripts/install-host.js",
+    "uninstall-host": "node scripts/install-host.js --uninstall",
     "lint": "eslint .",
     "build": "echo 'Build script TBD'"
   },
