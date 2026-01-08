@@ -7,37 +7,41 @@ description: Control Firefox browser remotely via WebSocket. Use when users ask 
 
 Control Firefox browser remotely via WebSocket API. The extension must be installed and running in Firefox.
 
-**Source:** /Users/titouanmathis/Lab/firefox-command
+**Extension:** https://addons.mozilla.org/firefox/addon/foxpilot/
+**Source:** https://github.com/anthropics/foxpilot
 
 ## Setup
 
-### First-time installation
+### Install the extension
+
+Install FoxPilot from Firefox Add-ons:
+https://addons.mozilla.org/firefox/addon/foxpilot/
+
+### Install the native host
+
+The native host enables communication between the extension and coding agents.
 
 ```bash
-cd /Users/titouanmathis/Lab/firefox-command
+# Clone the repository
+git clone https://github.com/anthropics/foxpilot.git /tmp/foxpilot
 
-# Install native host dependencies
-cd native-host && npm install && cd ..
-
-# Register native messaging host
-npm run install-host
+# Install and register native host
+cd /tmp/foxpilot/native-host && npm install
+cd /tmp/foxpilot && npm run install-host
 ```
-
-Then manually load the extension in Firefox:
-1. Go to `about:debugging#/runtime/this-firefox`
-2. Click "Load Temporary Add-on..."
-3. Select `/Users/titouanmathis/Lab/firefox-command/extension/manifest.json`
 
 ### Verify connection
 
 Click the FoxPilot icon in Firefox toolbar - it should show "Connected".
+
+> **Note:** If disconnected, ensure the native host is registered (`npm run install-host`) and reload Firefox.
 
 ## Writing Scripts
 
 Execute scripts using the FoxPilotClient:
 
 ```bash
-cd /Users/titouanmathis/Lab/firefox-command && node <<'EOF'
+cd /tmp/foxpilot && node <<'EOF'
 import { FoxPilotClient } from './client/foxpilot-client.js';
 
 const client = new FoxPilotClient();
@@ -140,7 +144,7 @@ await client.waitForSelector('.loaded', 10000);       // Wait for element (timeo
 ### Navigate and extract data
 
 ```bash
-cd /Users/titouanmathis/Lab/firefox-command && node <<'EOF'
+cd /tmp/foxpilot && node <<'EOF'
 import { FoxPilotClient } from './client/foxpilot-client.js';
 
 const client = new FoxPilotClient();
@@ -164,7 +168,7 @@ EOF
 ### Fill and submit a form
 
 ```bash
-cd /Users/titouanmathis/Lab/firefox-command && node <<'EOF'
+cd /tmp/foxpilot && node <<'EOF'
 import { FoxPilotClient } from './client/foxpilot-client.js';
 
 const client = new FoxPilotClient();
@@ -188,7 +192,7 @@ EOF
 ### Take a screenshot
 
 ```bash
-cd /Users/titouanmathis/Lab/firefox-command && node <<'EOF'
+cd /tmp/foxpilot && node <<'EOF'
 import { FoxPilotClient } from './client/foxpilot-client.js';
 import { writeFileSync } from 'fs';
 
@@ -210,7 +214,7 @@ EOF
 ### Multi-tab workflow
 
 ```bash
-cd /Users/titouanmathis/Lab/firefox-command && node <<'EOF'
+cd /tmp/foxpilot && node <<'EOF'
 import { FoxPilotClient } from './client/foxpilot-client.js';
 
 const client = new FoxPilotClient();
@@ -271,7 +275,7 @@ lsof -i :9222
 
 Restart connection:
 1. Kill existing host: `pkill -f foxpilot`
-2. Reload extension in Firefox (`about:debugging`)
+2. Restart Firefox or disable/enable the extension
 
 ## FoxPilot vs dev-browser
 
