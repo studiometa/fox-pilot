@@ -15,8 +15,8 @@ import { platform, homedir } from 'os';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, '..');
 
-const HOST_NAME = 'firefox_command';
-const EXTENSION_ID = 'firefox-command@example.com';
+const HOST_NAME = 'foxpilot';
+const EXTENSION_ID = 'foxpilot@anthropic.com';
 
 /**
  * Get the native messaging hosts directory for the current OS
@@ -45,7 +45,7 @@ function createManifest() {
 
   return {
     name: HOST_NAME,
-    description: 'Firefox Command native messaging host',
+    description: 'FoxPilot native messaging host',
     path: hostPath,
     type: 'stdio',
     allowed_extensions: [EXTENSION_ID],
@@ -56,7 +56,7 @@ function createManifest() {
  * Install the native messaging host
  */
 function install() {
-  console.log('Installing Firefox Command native messaging host...\n');
+  console.log('Installing FoxPilot native messaging host...\n');
 
   const hostsDir = getNativeHostsDir();
   const manifestPath = join(hostsDir, `${HOST_NAME}.json`);
@@ -108,7 +108,7 @@ function install() {
 async function uninstall() {
   const { unlinkSync } = await import('fs');
 
-  console.log('Uninstalling Firefox Command native messaging host...\n');
+  console.log('Uninstalling FoxPilot native messaging host...\n');
 
   const hostsDir = getNativeHostsDir();
   const manifestPath = join(hostsDir, `${HOST_NAME}.json`);

@@ -6,10 +6,10 @@
  * Demonstrates how to fill and submit a form.
  */
 
-import { FirefoxClient } from '../client/firefox-client.js';
+import { FoxPilotClient } from '../client/foxpilot-client.js';
 
 async function main() {
-  const client = new FirefoxClient();
+  const client = new FoxPilotClient();
 
   try {
     console.log('Connecting to Firefox...');

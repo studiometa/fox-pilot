@@ -1,13 +1,13 @@
 /**
- * Firefox Command Client
+ * FoxPilot Client
  *
  * A simple client library for coding agents to control Firefox.
  *
  * @example
  * ```javascript
- * import { FirefoxClient } from './firefox-client.js';
+ * import { FoxPilotClient } from './foxpilot-client.js';
  *
- * const client = new FirefoxClient();
+ * const client = new FoxPilotClient();
  * await client.connect();
  *
  * await client.navigate('https://example.com');
@@ -16,10 +16,10 @@
  * ```
  */
 
-export class FirefoxClient {
+export class FoxPilotClient {
   constructor(options = {}) {
     this.url = options.url || 'ws://localhost:9222';
-    this.token = options.token || process.env.FIREFOX_COMMAND_TOKEN || 'default-dev-token';
+    this.token = options.token || process.env.FOXPILOT_TOKEN || 'default-dev-token';
     this.ws = null;
     this.requestId = 0;
     this.pendingRequests = new Map();
@@ -27,7 +27,7 @@ export class FirefoxClient {
   }
 
   /**
-   * Connect to Firefox Command server
+   * Connect to FoxPilot server
    * @returns {Promise<void>}
    */
   async connect() {
@@ -275,4 +275,4 @@ export class FirefoxClient {
   }
 }
 
-export default FirefoxClient;
+export default FoxPilotClient;

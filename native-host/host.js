@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Firefox Command - Native Messaging Host
+ * FoxPilot - Native Messaging Host
  *
  * This script acts as a bridge between external WebSocket clients (coding agents)
  * and the Firefox extension via Native Messaging.
@@ -11,7 +11,7 @@ import { WebSocketServer } from 'ws';
 import { createServer } from 'http';
 
 const PORT = 9222;
-const AUTH_TOKEN = process.env.FIREFOX_COMMAND_TOKEN || 'default-dev-token';
+const AUTH_TOKEN = process.env.FOXPILOT_TOKEN || 'default-dev-token';
 
 // Redirect console.log to stderr (stdout is reserved for native messaging)
 const originalLog = console.log;

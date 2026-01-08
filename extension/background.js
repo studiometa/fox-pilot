@@ -1,11 +1,11 @@
 /**
- * Firefox Command - Background Script
+ * FoxPilot - Background Script
  *
  * Handles communication between native messaging host and content scripts.
  * Acts as the central hub for all browser control operations.
  */
 
-const NATIVE_HOST_NAME = 'firefox_command';
+const NATIVE_HOST_NAME = 'foxpilot';
 
 let nativePort = null;
 let isConnected = false;
@@ -21,9 +21,9 @@ function connectToNativeHost() {
 
     nativePort.onDisconnect.addListener((port) => {
       const error = port.error || browser.runtime.lastError;
-      console.log('[Firefox Command] Disconnected from native host');
+      console.log('[FoxPilot] Disconnected from native host');
       if (error) {
-        console.error('[Firefox Command] Disconnect reason:', error.message || error);
+        console.error('[FoxPilot] Disconnect reason:', error.message || error);
       }
       isConnected = false;
       nativePort = null;
@@ -33,9 +33,9 @@ function connectToNativeHost() {
     });
 
     isConnected = true;
-    console.log('[Firefox Command] Connected to native host');
+    console.log('[FoxPilot] Connected to native host');
   } catch (error) {
-    console.error('[Firefox Command] Failed to connect to native host:', error);
+    console.error('[FoxPilot] Failed to connect to native host:', error);
     setTimeout(connectToNativeHost, 5000);
   }
 }
@@ -318,4 +318,4 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-console.log('[Firefox Command] Extension loaded');
+console.log('[FoxPilot] Extension loaded');

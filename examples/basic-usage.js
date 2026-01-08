@@ -7,10 +7,10 @@
  * to control Firefox from a coding agent or script.
  */
 
-import { FirefoxClient } from '../client/firefox-client.js';
+import { FoxPilotClient } from '../client/foxpilot-client.js';
 
 async function main() {
-  const client = new FirefoxClient({
+  const client = new FoxPilotClient({
     // Optional: customize connection settings
     // url: 'ws://localhost:9222',
     // token: 'your-custom-token',

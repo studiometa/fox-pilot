@@ -1,5 +1,5 @@
 /**
- * Firefox Command - Popup Script
+ * FoxPilot - Popup Script
  */
 
 const statusIndicator = document.getElementById('statusIndicator');

@@ -1,5 +1,5 @@
 /**
- * Firefox Command - Content Script
+ * FoxPilot - Content Script
  *
  * Runs in the context of web pages and handles DOM interactions.
  */
@@ -365,5 +365,5 @@
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  console.log('[Firefox Command] Content script loaded');
+  console.log('[FoxPilot] Content script loaded');
 })();

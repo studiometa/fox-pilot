@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Firefox Command",
+  "name": "FoxPilot",
   "version": "0.1.0",
   "description": "Remote browser control for coding agents",
   "author": "Titouan Mathis",
@@ -37,13 +37,13 @@
       "48": "icons/icon-48.png",
       "96": "icons/icon-96.png"
     },
-    "default_title": "Firefox Command",
+    "default_title": "FoxPilot",
     "default_popup": "popup/popup.html"
   },
 
   "browser_specific_settings": {
     "gecko": {
-      "id": "firefox-command@example.com",
+      "id": "foxpilot@anthropic.com",
       "strict_min_version": "109.0"
     }
   }

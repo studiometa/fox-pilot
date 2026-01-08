@@ -1,7 +1,7 @@
 {
-  "name": "firefox-command-native-host",
+  "name": "foxpilot-native-host",
   "version": "0.1.0",
-  "description": "Native messaging host for Firefox Command extension",
+  "description": "Native messaging host for FoxPilot extension",
   "type": "module",
   "main": "host.js",
   "scripts": {
