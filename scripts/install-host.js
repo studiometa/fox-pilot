@@ -41,7 +41,9 @@ function getNativeHostsDir() {
  * Create the native messaging host manifest
  */
 function createManifest() {
-  const hostPath = join(projectRoot, 'native-host', 'host.js');
+  // Use shell wrapper on macOS/Linux for proper Node.js execution
+  const hostFile = platform() === 'win32' ? 'host.js' : 'host.sh';
+  const hostPath = join(projectRoot, 'native-host', hostFile);
 
   return {
     name: HOST_NAME,
