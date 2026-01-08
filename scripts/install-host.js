@@ -105,8 +105,8 @@ function install() {
 /**
  * Uninstall the native messaging host
  */
-function uninstall() {
-  const { unlinkSync, rmSync } = await import('fs');
+async function uninstall() {
+  const { unlinkSync } = await import('fs');
 
   console.log('Uninstalling Firefox Command native messaging host...\n');
 
@@ -131,7 +131,7 @@ function uninstall() {
 const args = process.argv.slice(2);
 
 if (args.includes('--uninstall') || args.includes('-u')) {
-  uninstall();
+  await uninstall();
 } else {
   install();
 }

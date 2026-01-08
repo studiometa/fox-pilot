@@ -13,6 +13,10 @@ import { createServer } from 'http';
 const PORT = 9222;
 const AUTH_TOKEN = process.env.FIREFOX_COMMAND_TOKEN || 'default-dev-token';
 
+// Redirect console.log to stderr (stdout is reserved for native messaging)
+const originalLog = console.log;
+console.log = (...args) => console.error(...args);
+
 // Message queues for communication with extension
 let extensionPort = null;
 const pendingRequests = new Map();
@@ -30,6 +34,9 @@ function readNativeMessage() {
   // First 4 bytes = message length (little-endian)
 
   let buffer = Buffer.alloc(0);
+
+  // Keep stdin open
+  process.stdin.resume();
 
   process.stdin.on('data', (chunk) => {
     buffer = Buffer.concat([buffer, chunk]);
@@ -51,6 +58,15 @@ function readNativeMessage() {
         break;
       }
     }
+  });
+
+  process.stdin.on('end', () => {
+    console.error('[Native Host] stdin closed, exiting');
+    process.exit(0);
+  });
+
+  process.stdin.on('error', (error) => {
+    console.error('[Native Host] stdin error:', error);
   });
 }
 

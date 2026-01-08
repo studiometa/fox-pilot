@@ -19,8 +19,12 @@ function connectToNativeHost() {
 
     nativePort.onMessage.addListener(handleNativeMessage);
 
-    nativePort.onDisconnect.addListener(() => {
+    nativePort.onDisconnect.addListener((port) => {
+      const error = port.error || browser.runtime.lastError;
       console.log('[Firefox Command] Disconnected from native host');
+      if (error) {
+        console.error('[Firefox Command] Disconnect reason:', error.message || error);
+      }
       isConnected = false;
       nativePort = null;
 
