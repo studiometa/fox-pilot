@@ -46,5 +46,10 @@
       "id": "fox-pilot@ikko.fr",
       "strict_min_version": "109.0"
     }
+  },
+
+  "data_collection_permissions": {
+    "required": false,
+    "optional": false
   }
 }
