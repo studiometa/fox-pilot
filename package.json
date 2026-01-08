@@ -3,6 +3,20 @@
   "version": "0.1.0",
   "description": "Firefox extension for remote browser control by coding agents",
   "type": "module",
+  "main": "./client/foxpilot-client.js",
+  "exports": {
+    ".": "./client/foxpilot-client.js",
+    "./client": "./client/foxpilot-client.js"
+  },
+  "bin": {
+    "foxpilot": "./bin/foxpilot.js"
+  },
+  "files": [
+    "bin/",
+    "client/",
+    "native-host/",
+    "scripts/"
+  ],
   "scripts": {
     "start": "node native-host/host.js",
     "install-host": "node scripts/install-host.js",
@@ -15,11 +29,21 @@
     "extension",
     "browser-automation",
     "remote-control",
-    "coding-agent"
+    "coding-agent",
+    "puppeteer-alternative",
+    "playwright-alternative"
   ],
   "author": "Titouan Mathis",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthropics/foxpilot.git"
+  },
+  "homepage": "https://github.com/anthropics/foxpilot#readme",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "ws": "^8.14.0"
   }
 }

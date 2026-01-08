@@ -12,37 +12,49 @@ Control Firefox browser remotely via WebSocket API. The extension must be instal
 
 ## Setup
 
-### Install the extension
-
-Install FoxPilot from Firefox Add-ons:
-https://addons.mozilla.org/firefox/addon/foxpilot/
-
-### Install the native host
-
-The native host enables communication between the extension and coding agents.
+One command to install everything:
 
 ```bash
-# Clone the repository
-git clone https://github.com/anthropics/foxpilot.git /tmp/foxpilot
-
-# Install and register native host
-cd /tmp/foxpilot/native-host && npm install
-cd /tmp/foxpilot && npm run install-host
+npx foxpilot install
 ```
+
+This will:
+1. Register the native messaging host
+2. Open the Firefox Add-ons page for FoxPilot
+
+Just click "Add to Firefox" when the page opens.
 
 ### Verify connection
 
-Click the FoxPilot icon in Firefox toolbar - it should show "Connected".
+```bash
+npx foxpilot status
+```
 
-> **Note:** If disconnected, ensure the native host is registered (`npm run install-host`) and reload Firefox.
+Or click the FoxPilot icon in Firefox toolbar - it should show "Connected".
+
+### Other commands
+
+```bash
+npx foxpilot install    # Install native host + open extension page
+npx foxpilot uninstall  # Remove native host
+npx foxpilot status     # Check connection status
+npx foxpilot start      # Start server manually (for debugging)
+```
 
 ## Writing Scripts
 
-Execute scripts using the FoxPilotClient:
+Install foxpilot as a dependency or use the global install:
 
 ```bash
-cd /tmp/foxpilot && node <<'EOF'
-import { FoxPilotClient } from './client/foxpilot-client.js';
+npm install -g foxpilot   # Global install
+# or
+npm install foxpilot      # Local install
+```
+
+Then import and use:
+
+```javascript
+import { FoxPilotClient } from 'foxpilot';
 
 const client = new FoxPilotClient();
 await client.connect();
@@ -55,7 +67,19 @@ const { url } = await client.getUrl();
 console.log({ title, url });
 
 client.disconnect();
-EOF
+```
+
+### Quick inline script
+
+```bash
+node --input-type=module -e "
+import { FoxPilotClient } from 'foxpilot';
+const client = new FoxPilotClient();
+await client.connect();
+await client.navigate('https://example.com');
+console.log(await client.getTitle());
+client.disconnect();
+"
 ```
 
 ## Client API
@@ -63,7 +87,7 @@ EOF
 ### Connection
 
 ```javascript
-import { FoxPilotClient } from './client/foxpilot-client.js';
+import { FoxPilotClient } from 'foxpilot';
 
 const client = new FoxPilotClient({
   url: 'ws://localhost:9222',           // Default
@@ -144,8 +168,8 @@ await client.waitForSelector('.loaded', 10000);       // Wait for element (timeo
 ### Navigate and extract data
 
 ```bash
-cd /tmp/foxpilot && node <<'EOF'
-import { FoxPilotClient } from './client/foxpilot-client.js';
+node <<'EOF'
+import { FoxPilotClient } from 'foxpilot';
 
 const client = new FoxPilotClient();
 await client.connect();
@@ -168,8 +192,8 @@ EOF
 ### Fill and submit a form
 
 ```bash
-cd /tmp/foxpilot && node <<'EOF'
-import { FoxPilotClient } from './client/foxpilot-client.js';
+node <<'EOF'
+import { FoxPilotClient } from 'foxpilot';
 
 const client = new FoxPilotClient();
 await client.connect();
@@ -192,8 +216,8 @@ EOF
 ### Take a screenshot
 
 ```bash
-cd /tmp/foxpilot && node <<'EOF'
-import { FoxPilotClient } from './client/foxpilot-client.js';
+node <<'EOF'
+import { FoxPilotClient } from 'foxpilot';
 import { writeFileSync } from 'fs';
 
 const client = new FoxPilotClient();
@@ -214,8 +238,8 @@ EOF
 ### Multi-tab workflow
 
 ```bash
-cd /tmp/foxpilot && node <<'EOF'
-import { FoxPilotClient } from './client/foxpilot-client.js';
+node <<'EOF'
+import { FoxPilotClient } from 'foxpilot';
 
 const client = new FoxPilotClient();
 await client.connect();
