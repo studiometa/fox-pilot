@@ -180,8 +180,8 @@ async function status() {
   console.log(`\nWebSocket server (port ${PORT}):`);
 
   try {
-    const { Fox PilotClient } = await import('../client/foxpilot-client.js');
-    const client = new Fox PilotClient();
+    const { FoxPilotClient } = await import('../client/foxpilot-client.js');
+    const client = new FoxPilotClient();
     
     await Promise.race([
       client.connect(),
