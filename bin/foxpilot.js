@@ -176,33 +176,33 @@ async function status() {
     console.log(`  Manifest: ${manifestPath}`);
   }
 
-  // Check WebSocket server
+  // Check WebSocket server using the client
   console.log(`\nWebSocket server (port ${PORT}):`);
 
   try {
-    const { default: WebSocket } = await import('ws');
-    const ws = new WebSocket(`ws://localhost:${PORT}`);
-
-    await new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        ws.close();
-        reject(new Error('Connection timeout'));
-      }, 3000);
-
-      ws.on('open', () => {
-        clearTimeout(timeout);
-        console.log('  ✓ Server is running');
-        ws.close();
-        resolve();
-      });
-
-      ws.on('error', (error) => {
-        clearTimeout(timeout);
-        reject(error);
-      });
-    });
+    const { FoxPilotClient } = await import('../client/foxpilot-client.js');
+    const client = new FoxPilotClient();
+    
+    await Promise.race([
+      client.connect(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
+    ]);
+    
+    console.log('  ✓ Connected and authenticated');
+    
+    // Try to get current page info
+    try {
+      const { title } = await client.getTitle();
+      const { url } = await client.getUrl();
+      console.log(`  Current tab: ${title}`);
+      console.log(`  URL: ${url}`);
+    } catch (e) {
+      // Ignore errors getting page info
+    }
+    
+    client.disconnect();
   } catch (error) {
-    console.log('  ✗ Server not running (extension may not be active in Firefox)');
+    console.log('  ✗ Cannot connect (extension may not be active in Firefox)');
   }
 
   console.log('');
