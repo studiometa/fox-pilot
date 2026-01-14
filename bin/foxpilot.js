@@ -125,7 +125,7 @@ const commands = {
 
   async snapshot(args, flags) {
     const client = await getClient();
-    const result = await client.send('snapshot', {
+    const result = await client.snapshot({
       interactive: flags.i || flags.interactive || false,
       compact: flags.c || flags.compact || false,
       depth: flags.d || flags.depth || null,
