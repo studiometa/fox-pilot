@@ -1,317 +1,256 @@
 ---
 name: foxpilot
-description: Control Firefox browser remotely via WebSocket. Use when users ask to automate Firefox, navigate websites in Firefox, fill forms, take screenshots, extract web data, or test web apps in Firefox specifically. Trigger phrases include "in Firefox", "open in Firefox", "Firefox automation", or any browser task where Firefox is preferred over Chromium.
+description: Firefox browser automation CLI for AI agents. Use when users ask to automate Firefox, navigate websites, fill forms, take screenshots, extract web data, or test web apps in Firefox. Trigger phrases include "in Firefox", "foxpilot", "go to [url]", "click on", "fill out the form", "take a screenshot", "scrape", "automate", or any browser interaction request mentioning Firefox.
 ---
 
-# Fox Pilot Skill
+# FoxPilot Skill
 
-Control Firefox browser remotely via WebSocket API. The extension must be installed and running in Firefox.
+CLI-based Firefox browser automation optimized for AI agents. Simple commands, persistent sessions, accessibility snapshots with refs.
 
-**Extension:** https://addons.mozilla.org/firefox/addon/foxpilot/
-**Source:** https://github.com/studiometa/fox-pilot
+**Difference from agent-browser:** FoxPilot controls a real Firefox browser (not Chromium), preserving your existing session, cookies, and extensions.
 
 ## Setup
 
-One command to install everything:
+```bash
+# Install the package
+npm install -g foxpilot
+
+# Install native messaging host (run once)
+foxpilot install-host
+
+# Load extension in Firefox
+# 1. Go to about:debugging#/runtime/this-firefox
+# 2. Click "Load Temporary Add-on"
+# 3. Select extension/manifest.json
+```
+
+## Quick Start
 
 ```bash
-npx foxpilot install
+foxpilot open example.com
+foxpilot snapshot                    # Get accessibility tree with refs
+foxpilot click @e2                   # Click by ref from snapshot
+foxpilot fill @e3 "test@example.com" # Fill by ref
+foxpilot screenshot /tmp/page.png
 ```
 
-This will:
-1. Register the native messaging host
-2. Open the Firefox Add-ons page for Fox Pilot
+## Workflow Pattern
 
-Just click "Add to Firefox" when the page opens.
+1. **Navigate** to URL
+2. **Snapshot** to discover elements (use `-i` for interactive only)
+3. **Interact** using refs (`@e1`, `@e2`, etc.)
+4. **Verify** state with `get url`, `get title`, or screenshot
+5. **Repeat** as needed
 
-### Verify connection
-
-```bash
-npx foxpilot status
-```
-
-Or click the Fox Pilot icon in Firefox toolbar - it should show "Connected".
-
-### Other commands
-
-```bash
-npx foxpilot install    # Install native host + open extension page
-npx foxpilot uninstall  # Remove native host
-npx foxpilot status     # Check connection status
-npx foxpilot start      # Start server manually (for debugging)
-```
-
-## Writing Scripts
-
-Install foxpilot as a dependency or use the global install:
-
-```bash
-npm install -g foxpilot   # Global install
-# or
-npm install foxpilot      # Local install
-```
-
-Then import and use:
-
-```javascript
-import { Fox PilotClient } from 'foxpilot';
-
-const client = new Fox PilotClient();
-await client.connect();
-
-await client.navigate('https://example.com');
-await client.wait(1000);
-
-const { title } = await client.getTitle();
-const { url } = await client.getUrl();
-console.log({ title, url });
-
-client.disconnect();
-```
-
-### Quick inline script
-
-```bash
-node --input-type=module -e "
-import { Fox PilotClient } from 'foxpilot';
-const client = new Fox PilotClient();
-await client.connect();
-await client.navigate('https://example.com');
-console.log(await client.getTitle());
-client.disconnect();
-"
-```
-
-## Client API
-
-### Connection
-
-```javascript
-import { Fox PilotClient } from 'foxpilot';
-
-const client = new Fox PilotClient({
-  url: 'ws://localhost:9222',           // Default
-  token: process.env.FOXPILOT_TOKEN     // Optional auth token
-});
-
-await client.connect();
-client.disconnect();
-```
+## Core Commands
 
 ### Navigation
 
-```javascript
-await client.navigate('https://example.com');
-await client.back();
-await client.forward();
-await client.reload();
-
-const tabs = await client.getTabs();        // List all tabs
-await client.switchTab(tabId);              // Switch to tab
-const { tabId } = await client.newTab();    // Open new tab
-await client.closeTab(tabId);               // Close tab
+```bash
+foxpilot open <url>               # Navigate to URL
+foxpilot back                     # Go back
+foxpilot forward                  # Go forward
+foxpilot reload                   # Reload page
 ```
 
-### DOM Interaction
+### Snapshot (Element Discovery)
 
-```javascript
-await client.click('#button');
-await client.type('#input', 'Hello world');
-await client.scroll({ x: 0, y: 500 });
-await client.scrollTo('#element');
-await client.hover('#menu');
+The snapshot command returns an accessibility tree with refs for each element:
 
-const { value } = await client.getAttribute('#link', 'href');
-const { value } = await client.getProperty('#input', 'value');
+```bash
+foxpilot snapshot
+# Output:
+# - heading "Example Domain" [ref=@e1] [level=1]
+# - button "Submit" [ref=@e2]
+# - textbox "Email" [ref=@e3]
+# - link "Learn more" [ref=@e4]
 ```
 
-### Data Extraction
+#### Snapshot Options
 
-```javascript
-const { url } = await client.getUrl();
-const { title } = await client.getTitle();
-const { html } = await client.getHTML('#content');
-const { text } = await client.getText('#content');
-const { dataUrl } = await client.screenshot();  // Base64 PNG
+```bash
+foxpilot snapshot -i              # Interactive elements only (buttons, inputs, links)
+foxpilot snapshot -c              # Compact (remove empty structural elements)
+foxpilot snapshot -d 3            # Limit depth to 3 levels
+foxpilot snapshot -s "#main"      # Scope to CSS selector
+foxpilot snapshot -i -c -d 5      # Combine options
 ```
 
-### Query Elements
+**Recommended:** Use `snapshot -i -c` for most cases - shows only actionable elements.
 
-```javascript
-const { count, elements } = await client.query('.items');
-// elements[]: { index, tagName, id, className, textContent, isVisible, rect }
+### Interactions
+
+```bash
+foxpilot click <sel>              # Click element
+foxpilot dblclick <sel>           # Double-click
+foxpilot fill <sel> <text>        # Clear and fill input
+foxpilot type <sel> <text>        # Type into element (append)
+foxpilot press <key> [sel]        # Press key (Enter, Tab, Control+a)
+foxpilot select <sel> <val>       # Select dropdown option
+foxpilot check <sel>              # Check checkbox
+foxpilot uncheck <sel>            # Uncheck checkbox
+foxpilot scroll <dir> [px]        # Scroll (up/down/left/right)
+foxpilot hover <sel>              # Hover element
 ```
 
-### JavaScript Execution
+### Get Information
 
-```javascript
-const { result } = await client.evaluate(`
-  return document.querySelectorAll('a').length;
-`);
+```bash
+foxpilot get text <sel>           # Get text content
+foxpilot get html <sel>           # Get innerHTML
+foxpilot get value <sel>          # Get input value
+foxpilot get attr <sel> <attr>    # Get attribute
+foxpilot get title                # Get page title
+foxpilot get url                  # Get current URL
+foxpilot get count <sel>          # Count matching elements
+```
 
-// Async code supported
-const { result } = await client.evaluate(`
-  const response = await fetch('/api/data');
-  return response.json();
-`);
+### Check State
+
+```bash
+foxpilot is visible <sel>         # Check if visible
+foxpilot is enabled <sel>         # Check if enabled
+foxpilot is checked <sel>         # Check if checked
+```
+
+### Screenshots
+
+```bash
+foxpilot screenshot [path]        # Take screenshot
+foxpilot screenshot -f [path]     # Full page screenshot
 ```
 
 ### Waiting
 
-```javascript
-await client.wait(2000);                              // Fixed delay
-await client.waitForSelector('.loaded', 10000);       // Wait for element (timeout ms)
+```bash
+foxpilot wait <selector>          # Wait for element visible
+foxpilot wait 2000                # Wait 2 seconds
+foxpilot wait --text "Welcome"    # Wait for text
+foxpilot wait --url "**/success"  # Wait for URL pattern
+```
+
+### Semantic Locators (find command)
+
+```bash
+foxpilot find role button click --name "Submit"
+foxpilot find text "Sign In" click
+foxpilot find label "Email" fill "test@test.com"
+foxpilot find placeholder "Search" fill "query"
+```
+
+### Tabs
+
+```bash
+foxpilot tab                      # List tabs
+foxpilot tab new [url]            # New tab
+foxpilot tab 2                    # Switch to tab 2
+foxpilot tab close                # Close current tab
+```
+
+### JavaScript Execution
+
+```bash
+foxpilot eval "return document.title"
+foxpilot eval "localStorage.getItem('token')"
+```
+
+## Selectors
+
+### Refs (Recommended)
+
+Use refs from snapshot for reliable element selection:
+
+```bash
+foxpilot click @e2
+foxpilot fill @e3 "value"
+foxpilot get text @e1
+```
+
+### CSS Selectors
+
+```bash
+foxpilot click "#id"
+foxpilot click ".class"
+foxpilot click "button[type=submit]"
 ```
 
 ## Common Patterns
 
-### Navigate and extract data
+### Login Flow
 
 ```bash
-node <<'EOF'
-import { Fox PilotClient } from 'foxpilot';
-
-const client = new Fox PilotClient();
-await client.connect();
-
-await client.navigate('https://news.ycombinator.com');
-await client.wait(2000);
-
-const { result: stories } = await client.evaluate(`
-  return Array.from(document.querySelectorAll('.athing')).slice(0, 5).map(el => ({
-    title: el.querySelector('.titleline > a')?.textContent,
-    url: el.querySelector('.titleline > a')?.href
-  }));
-`);
-
-console.log('Top 5 stories:', stories);
-client.disconnect();
-EOF
+foxpilot open https://example.com/login
+foxpilot snapshot -i
+# Shows: textbox "Email" [ref=@e1], textbox "Password" [ref=@e2], button "Sign in" [ref=@e3]
+foxpilot fill @e1 "user@example.com"
+foxpilot fill @e2 "password123"
+foxpilot click @e3
+foxpilot wait --url "**/dashboard"
+foxpilot get url
 ```
 
-### Fill and submit a form
+### Form Submission
 
 ```bash
-node <<'EOF'
-import { Fox PilotClient } from 'foxpilot';
-
-const client = new Fox PilotClient();
-await client.connect();
-
-await client.navigate('https://example.com/login');
-await client.wait(1000);
-
-await client.type('#username', 'myuser');
-await client.type('#password', 'mypassword');
-await client.click('button[type="submit"]');
-
-await client.wait(3000);
-const { url } = await client.getUrl();
-console.log('After login:', url);
-
-client.disconnect();
-EOF
+foxpilot open https://example.com/contact
+foxpilot snapshot -i -c
+foxpilot fill @e1 "John Doe"
+foxpilot fill @e2 "john@example.com"
+foxpilot fill @e3 "Hello, this is my message"
+foxpilot click @e4  # Submit button
+foxpilot wait --text "Thank you"
+foxpilot screenshot /tmp/confirmation.png
 ```
 
-### Take a screenshot
+### Scraping Data
 
 ```bash
-node <<'EOF'
-import { Fox PilotClient } from 'foxpilot';
-import { writeFileSync } from 'fs';
-
-const client = new Fox PilotClient();
-await client.connect();
-
-await client.navigate('https://example.com');
-await client.wait(1000);
-
-const { dataUrl } = await client.screenshot();
-const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
-writeFileSync('/tmp/screenshot.png', Buffer.from(base64Data, 'base64'));
-console.log('Screenshot saved to /tmp/screenshot.png');
-
-client.disconnect();
-EOF
+foxpilot open https://example.com/products
+foxpilot snapshot -s ".product-list"
+foxpilot get text ".product-title"
+foxpilot get attr ".product-link" "href"
 ```
 
-### Multi-tab workflow
+### Debug Failed Interaction
 
 ```bash
-node <<'EOF'
-import { Fox PilotClient } from 'foxpilot';
-
-const client = new Fox PilotClient();
-await client.connect();
-
-// Open two tabs
-const { tabId: tab1 } = await client.newTab('https://example.com');
-const { tabId: tab2 } = await client.newTab('https://google.com');
-
-await client.wait(2000);
-
-// Switch between tabs and get titles
-await client.switchTab(tab1);
-const { title: title1 } = await client.getTitle();
-
-await client.switchTab(tab2);
-const { title: title2 } = await client.getTitle();
-
-console.log({ tab1: title1, tab2: title2 });
-
-// Cleanup
-await client.closeTab(tab1);
-await client.closeTab(tab2);
-
-client.disconnect();
-EOF
+foxpilot screenshot /tmp/debug.png
+foxpilot get url
+foxpilot get title
+foxpilot snapshot -i
 ```
 
-## Error Handling
+## Options
 
-```javascript
-try {
-  await client.click('#nonexistent');
-} catch (error) {
-  console.error(error.code);    // 'ELEMENT_NOT_FOUND'
-  console.error(error.message); // 'Element not found: #nonexistent'
-}
-```
+| Option             | Description               |
+| ------------------ | ------------------------- |
+| `--json`           | JSON output (for parsing) |
+| `-f, --full`       | Full page screenshot      |
+| `-i, --interactive`| Interactive elements only |
+| `-c, --compact`    | Compact snapshot          |
+| `-d, --depth <n>`  | Limit snapshot depth      |
+| `-s, --scope <sel>`| Scope snapshot to selector|
 
-Error codes:
-- `ELEMENT_NOT_FOUND` - Selector didn't match any element
-- `TIMEOUT` - waitForSelector exceeded timeout
-- `NO_ACTIVE_TAB` - No active tab in Firefox
-- `EVAL_ERROR` - JavaScript evaluation failed
-- `NOT_AUTHENTICATED` - Auth token required/invalid
+## Tips
 
-## Debugging
+- **Always snapshot first** before interacting with unknown pages
+- **Use `-i -c` flags** on snapshot to reduce noise
+- **Prefer refs over CSS** for reliability
+- **Check `--json` output** when you need to parse results programmatically
+- **Firefox session is preserved** - your cookies, logins, and extensions work
 
-Check native host logs:
+## Troubleshooting
+
 ```bash
-cat /tmp/fox-pilot.log
-```
-
-Check if WebSocket server is running:
-```bash
+# Check if native host is running
 lsof -i :9222
+
+# View native host logs
+tail -f /tmp/fox-pilot.log
+
+# Reinstall native host
+foxpilot install-host
+
+# Reload extension
+# Go to about:debugging#/runtime/this-firefox and click "Reload"
 ```
-
-Restart connection:
-1. Kill existing host: `pkill -f foxpilot`
-2. Restart Firefox or disable/enable the extension
-
-## Fox Pilot vs dev-browser
-
-| Feature | Fox Pilot | dev-browser |
-|---------|----------|-------------|
-| Browser | Firefox | Chromium |
-| Setup | Extension + native host | Clone + npm install |
-| Persistence | Browser stays open | Server keeps pages |
-| Use case | Firefox-specific testing | General automation |
-
-Use Fox Pilot when:
-- You need Firefox specifically
-- Testing Firefox compatibility
-- User prefers Firefox
-- Need access to Firefox-specific features
