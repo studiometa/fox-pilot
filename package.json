@@ -35,6 +35,9 @@
   ],
   "author": "Titouan Mathis",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/studiometa/fox-pilot.git"
