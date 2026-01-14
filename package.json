@@ -21,7 +21,7 @@
     "start": "node native-host/host.js",
     "install-host": "node scripts/install-host.js",
     "uninstall-host": "node scripts/install-host.js --uninstall",
-    "lint": "eslint .",
+    "lint": "npx oxlint .",
     "build": "echo 'Build script TBD'"
   },
   "keywords": [
