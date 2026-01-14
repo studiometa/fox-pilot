@@ -222,12 +222,80 @@ export class FoxPilotClient {
     return this.send('hover', { selector });
   }
 
+  async fill(selector, text) {
+    return this.send('fill', { selector, text });
+  }
+
+  async press(key, selector = null) {
+    return this.send('press', { key, selector });
+  }
+
+  async select(selector, value) {
+    return this.send('select', { selector, value });
+  }
+
+  async check(selector) {
+    return this.send('check', { selector });
+  }
+
+  async uncheck(selector) {
+    return this.send('uncheck', { selector });
+  }
+
   async getAttribute(selector, attribute) {
     return this.send('getAttribute', { selector, attribute });
   }
 
   async getProperty(selector, property) {
     return this.send('getProperty', { selector, property });
+  }
+
+  async getValue(selector) {
+    return this.send('getValue', { selector });
+  }
+
+  // ===========================================================================
+  // Snapshot
+  // ===========================================================================
+
+  async snapshot(options = {}) {
+    return this.send('snapshot', options);
+  }
+
+  // ===========================================================================
+  // State Checks
+  // ===========================================================================
+
+  async isVisible(selector) {
+    return this.send('isVisible', { selector });
+  }
+
+  async isEnabled(selector) {
+    return this.send('isEnabled', { selector });
+  }
+
+  async isChecked(selector) {
+    return this.send('isChecked', { selector });
+  }
+
+  // ===========================================================================
+  // Semantic Locators
+  // ===========================================================================
+
+  async findByRole(role, options = {}) {
+    return this.send('findByRole', { role, ...options });
+  }
+
+  async findByLabel(label, options = {}) {
+    return this.send('findByLabel', { label, ...options });
+  }
+
+  async findByText(text, options = {}) {
+    return this.send('findByText', { text, ...options });
+  }
+
+  async findByPlaceholder(placeholder, options = {}) {
+    return this.send('findByPlaceholder', { placeholder, ...options });
   }
 
   // ===========================================================================
@@ -268,6 +336,10 @@ export class FoxPilotClient {
 
   async waitForSelector(selector, timeout = 30000) {
     return this.send('waitForSelector', { selector, timeout });
+  }
+
+  async waitForText(text, timeout = 30000) {
+    return this.send('waitForText', { text, timeout });
   }
 
   async wait(ms) {
