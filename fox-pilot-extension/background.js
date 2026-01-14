@@ -90,28 +90,14 @@ async function executeCommand(method, params) {
     newTab,
     closeTab,
 
-    // Snapshot
-    snapshot,
-
-    // DOM Query
-    query,
-
     // DOM Interaction
+    query,
     click,
     type,
-    fill,
-    press,
-    select,
-    check,
-    uncheck,
     scroll,
     hover,
-    upload,
-
-    // Attributes & Properties
     getAttribute,
     getProperty,
-    getValue,
 
     // Data Extraction
     getHTML,
@@ -120,24 +106,12 @@ async function executeCommand(method, params) {
     getTitle,
     screenshot,
 
-    // State Checks
-    isVisible,
-    isEnabled,
-    isChecked,
-
     // JavaScript
     evaluate,
 
     // Waiting
     waitForSelector,
-    waitForText,
     wait,
-
-    // Semantic Locators
-    findByRole,
-    findByLabel,
-    findByText,
-    findByPlaceholder,
   };
 
   const handler = commands[method];
@@ -204,24 +178,12 @@ async function closeTab({ tabId } = {}) {
 }
 
 // ============================================================================
-// Snapshot Command
-// ============================================================================
-
-async function snapshot(params) {
-  return executeInContentScript('snapshot', params);
-}
-
-// ============================================================================
-// DOM Query Command
+// DOM Interaction Commands
 // ============================================================================
 
 async function query({ selector }) {
   return executeInContentScript('query', { selector });
 }
-
-// ============================================================================
-// DOM Interaction Commands
-// ============================================================================
 
 async function click({ selector }) {
   return executeInContentScript('click', { selector });
@@ -231,36 +193,12 @@ async function type({ selector, text }) {
   return executeInContentScript('type', { selector, text });
 }
 
-async function fill({ selector, text }) {
-  return executeInContentScript('fill', { selector, text });
-}
-
-async function press({ selector, key }) {
-  return executeInContentScript('press', { selector, key });
-}
-
-async function select({ selector, value, label }) {
-  return executeInContentScript('select', { selector, value, label });
-}
-
-async function check({ selector }) {
-  return executeInContentScript('check', { selector });
-}
-
-async function uncheck({ selector }) {
-  return executeInContentScript('uncheck', { selector });
-}
-
-async function scroll(params) {
-  return executeInContentScript('scroll', params);
+async function scroll({ x, y, selector }) {
+  return executeInContentScript('scroll', { x, y, selector });
 }
 
 async function hover({ selector }) {
   return executeInContentScript('hover', { selector });
-}
-
-async function upload({ selector, files }) {
-  return executeInContentScript('upload', { selector, files });
 }
 
 async function getAttribute({ selector, attribute }) {
@@ -269,46 +207,6 @@ async function getAttribute({ selector, attribute }) {
 
 async function getProperty({ selector, property }) {
   return executeInContentScript('getProperty', { selector, property });
-}
-
-async function getValue({ selector }) {
-  return executeInContentScript('getValue', { selector });
-}
-
-// ============================================================================
-// State Check Commands
-// ============================================================================
-
-async function isVisible({ selector }) {
-  return executeInContentScript('isVisible', { selector });
-}
-
-async function isEnabled({ selector }) {
-  return executeInContentScript('isEnabled', { selector });
-}
-
-async function isChecked({ selector }) {
-  return executeInContentScript('isChecked', { selector });
-}
-
-// ============================================================================
-// Semantic Locator Commands
-// ============================================================================
-
-async function findByRole(params) {
-  return executeInContentScript('findByRole', params);
-}
-
-async function findByLabel(params) {
-  return executeInContentScript('findByLabel', params);
-}
-
-async function findByText(params) {
-  return executeInContentScript('findByText', params);
-}
-
-async function findByPlaceholder(params) {
-  return executeInContentScript('findByPlaceholder', params);
 }
 
 // ============================================================================
@@ -362,10 +260,6 @@ async function evaluate({ code }) {
 
 async function waitForSelector({ selector, timeout = 30000 }) {
   return executeInContentScript('waitForSelector', { selector, timeout });
-}
-
-async function waitForText({ text, timeout = 30000 }) {
-  return executeInContentScript('waitForText', { text, timeout });
 }
 
 async function wait({ ms }) {
