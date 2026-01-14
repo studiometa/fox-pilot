@@ -1,5 +1,5 @@
 {
-  "name": "foxpilot",
+  "name": "fox-pilot",
   "version": "0.1.0",
   "description": "Firefox extension for remote browser control by coding agents",
   "type": "module",
