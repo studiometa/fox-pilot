@@ -141,7 +141,7 @@ const server = Bun.serve<WebSocketData>({
   },
 
   websocket: {
-    open(ws) {
+    open(_ws) {
       console.error('[WebSocket] New connection');
     },
 

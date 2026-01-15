@@ -10,7 +10,7 @@
     "install-host": "bun run --cwd packages/scripts install",
     "uninstall-host": "bun run --cwd packages/scripts uninstall",
     "build:host": "bun run --cwd packages/native-host build",
-    "lint": "bunx oxlint packages/",
+    "lint": "bunx oxlint --tsconfig tsconfig.json packages/",
     "typecheck": "tsc"
   },
   "keywords": [

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "plugins": ["typescript", "unicorn", "import", "promise"],
+  "rules": {
+    // TypeScript strict rules
+    "typescript/no-explicit-any": "warn",
+    "typescript/no-non-null-assertion": "warn",
+    "typescript/prefer-ts-expect-error": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/no-for-in-array": "error",
+    "typescript/consistent-type-imports": "warn",
+    "typescript/no-import-type-side-effects": "error",
+
+    // Import rules
+    "import/no-cycle": "error",
+    "import/no-self-import": "error",
+
+    // Promise rules
+    "promise/no-return-in-finally": "error",
+    "promise/valid-params": "error",
+    "promise/avoid-new": "off",
+
+    // Disable overly strict rules
+    "no-magic-numbers": "off",
+    "no-ternary": "off",
+    "sort-imports": "off",
+    "sort-keys": "off",
+    "prefer-destructuring": "off",
+    "radix": "off",
+    "require-await": "off",
+
+    // Unicorn adjustments
+    "unicorn/no-null": "off",
+    "unicorn/filename-case": "off",
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/no-array-reduce": "off",
+    "unicorn/no-array-for-each": "off",
+    "unicorn/numeric-separators-style": "off",
+    "unicorn/switch-case-braces": "off",
+    "unicorn/prefer-top-level-await": "off",
+    "unicorn/no-nested-ternary": "off",
+    "unicorn/catch-error-name": "off",
+    "unicorn/prefer-add-event-listener": "off",
+    "unicorn/prefer-set-has": "off",
+
+    // Allow await in loops for polling patterns
+    "no-await-in-loop": "off"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "**/dist/",
+    "packages/extension/"
+  ]
+}

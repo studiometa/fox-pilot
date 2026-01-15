@@ -224,10 +224,9 @@ export class FoxPilotClient {
    * Register an event handler
    */
   on(event: string, handler: (data: unknown) => void): void {
-    if (!this.eventHandlers.has(event)) {
-      this.eventHandlers.set(event, []);
-    }
-    this.eventHandlers.get(event)!.push(handler);
+    const handlers = this.eventHandlers.get(event) ?? [];
+    handlers.push(handler);
+    this.eventHandlers.set(event, handlers);
   }
 
   // ===========================================================================
