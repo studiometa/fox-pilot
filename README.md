@@ -10,6 +10,11 @@
 > [!WARNING]
 > **Experimental Project** — This project was entirely built by AI coding agents (Claude). While functional, it may contain bugs, security issues, or unexpected behavior. Use at your own risk, especially in production environments or with sensitive data.
 
+## Requirements
+
+- **Node.js 24+** (for native TypeScript support)
+- **Firefox 109+**
+
 ## Installation
 
 ### 1. Install the Firefox Extension
@@ -22,12 +27,11 @@ Install [Fox Pilot](https://addons.mozilla.org/firefox/addon/fox-pilot/) from th
 # With npm
 npm install -g @fox-pilot/cli
 
-# With bun
-bun install -g @fox-pilot/cli
-
 # Or run directly with npx
 npx @fox-pilot/cli --help
 ```
+
+The CLI automatically installs the correct native host binary for your platform (macOS ARM64, macOS Intel, or Linux x64).
 
 ### 3. Start Using
 
@@ -190,7 +194,7 @@ The CLI supports multiple selector types:
 
 ## Client Library
 
-For programmatic usage in Node.js/Bun, use the client library:
+For programmatic usage in Node.js, use the client library:
 
 ```bash
 npm install @fox-pilot/client
@@ -217,7 +221,7 @@ See the [client library documentation](./packages/client/README.md) for the full
 ```
 ┌─────────────────┐     WebSocket      ┌──────────────────┐
 │  CLI / Agent    │◄──────────────────►│  Native Host     │
-│  (fox-pilot)    │    localhost:9222  │  (Bun binary)    │
+│  (Node.js 24+)  │    localhost:9222  │  (binary)        │
 └─────────────────┘                    └────────┬─────────┘
                                                 │ Native Messaging
                                                 ▼
@@ -231,6 +235,18 @@ See the [client library documentation](./packages/client/README.md) for the full
                                        │   Web Page DOM   │
                                        └──────────────────┘
 ```
+
+### Platform Support
+
+The native host is compiled to standalone binaries for each platform:
+
+| Platform | Package |
+|----------|---------|
+| macOS ARM64 (Apple Silicon) | `@fox-pilot/native-host-darwin-arm64` |
+| macOS x64 (Intel) | `@fox-pilot/native-host-darwin-x64` |
+| Linux x64 | `@fox-pilot/native-host-linux-x64` |
+
+npm automatically installs only the binary for your platform.
 
 ### Security
 
@@ -247,10 +263,10 @@ To contribute or run the project locally:
 git clone https://github.com/studiometa/fox-pilot.git
 cd fox-pilot
 
-# Install dependencies
+# Install dependencies (requires Bun for development)
 bun install
 
-# Build native host binary
+# Build native host binary for your platform
 bun run build:host
 
 # Install native messaging host
@@ -259,11 +275,12 @@ bun run install-host
 # Load extension manually in Firefox (about:debugging)
 # Select packages/extension/src/manifest.json
 
-# Start the server
-bun run start
-
 # Run tests
 bun run test
+
+# Lint and type check
+bun run lint
+bun run typecheck
 ```
 
 ### Project Structure
@@ -271,14 +288,25 @@ bun run test
 ```
 fox-pilot/
 ├── packages/
-│   ├── cli/             # @fox-pilot/cli - This CLI tool
-│   ├── client/          # @fox-pilot/client - TypeScript client library
-│   ├── extension/       # Firefox extension (Manifest V2)
-│   ├── native-host/     # WebSocket server (compiles to binary)
-│   └── scripts/         # Installation scripts
-├── package.json         # Workspace root
-└── tsconfig.json        # Shared TypeScript config
+│   ├── cli/                     # @fox-pilot/cli - CLI tool (TypeScript)
+│   ├── client/                  # @fox-pilot/client - Client library (TypeScript)
+│   ├── extension/               # Firefox extension (JavaScript, Manifest V2)
+│   ├── native-host/             # Native host source (TypeScript → compiled binary)
+│   ├── native-host-darwin-arm64/# macOS ARM64 binary package
+│   ├── native-host-darwin-x64/  # macOS Intel binary package
+│   ├── native-host-linux-x64/   # Linux x64 binary package
+│   └── scripts/                 # Installation scripts
+├── package.json                 # Workspace root
+└── tsconfig.json                # TypeScript config
 ```
+
+### Technology Stack
+
+- **CLI/Client**: TypeScript (runs directly on Node.js 24+ via native type stripping)
+- **Native Host**: TypeScript compiled to standalone binary via Bun
+- **Extension**: Plain JavaScript (for Firefox Add-ons compatibility)
+- **Testing**: Vitest
+- **Linting**: oxlint
 
 ## Contributing
 

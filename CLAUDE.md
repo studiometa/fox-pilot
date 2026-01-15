@@ -13,36 +13,46 @@ Firefox extension enabling remote browser control by coding agents (Claude, Curs
 
 ## Project Structure
 
-This project uses **npm workspaces** with **Bun** and **TypeScript**:
+This project uses **npm workspaces** with **Bun** (for development) and **TypeScript**:
 
 ```
 fox-pilot/
 ├── packages/
-│   ├── client/          # @fox-pilot/client - TypeScript client library
+│   ├── client/                  # @fox-pilot/client - TypeScript client library
 │   │   └── src/
-│   │       ├── index.ts       # Client implementation
-│   │       └── index.test.ts  # Vitest tests
-│   ├── cli/             # @fox-pilot/cli - Command-line interface
+│   │       ├── index.ts         # Client implementation
+│   │       └── index.test.ts    # Vitest tests
+│   ├── cli/                     # @fox-pilot/cli - Command-line interface
 │   │   └── src/
-│   │       └── cli.ts
-│   ├── extension/       # Firefox extension (Manifest V2)
+│   │       ├── cli.ts           # CLI implementation
+│   │       └── cli.test.ts      # Vitest tests
+│   ├── extension/               # Firefox extension (Manifest V2, plain JS)
 │   │   └── src/
 │   │       ├── manifest.json
-│   │       ├── background.js  # Native messaging + command routing
-│   │       ├── content.js     # DOM interactions
-│   │       └── popup/         # Extension popup UI
-│   ├── native-host/     # WebSocket server (compiles to binary)
+│   │       ├── background.js    # Native messaging + command routing
+│   │       ├── content.js       # DOM interactions
+│   │       └── popup/           # Extension popup UI
+│   ├── native-host/             # Native host source (compiles to binary)
 │   │   ├── src/
 │   │   │   └── host.ts
-│   │   ├── dist/
-│   │   │   └── fox-pilot-host  # Compiled Bun binary
-│   │   └── host.sh            # Shell wrapper for macOS
-│   └── scripts/         # Installation scripts
+│   │   └── dist/
+│   │       └── fox-pilot-host   # Compiled binary (local dev)
+│   ├── native-host-darwin-arm64/# Platform binary package (macOS ARM64)
+│   ├── native-host-darwin-x64/  # Platform binary package (macOS Intel)
+│   ├── native-host-linux-x64/   # Platform binary package (Linux x64)
+│   └── scripts/                 # Installation scripts
 │       └── src/
 │           └── install-host.ts
-├── package.json         # Workspace root with scripts
-└── tsconfig.json        # Shared TypeScript config
+├── package.json                 # Workspace root with scripts
+├── tsconfig.json                # Shared TypeScript config
+└── vitest.config.ts             # Test configuration
 ```
+
+## Runtime Requirements
+
+- **CLI/Client**: Node.js 24+ (native TypeScript type stripping, no build step)
+- **Native Host**: Compiled binary (no runtime needed)
+- **Development**: Bun (for building binaries, running tests)
 
 ## Development
 
@@ -50,7 +60,7 @@ fox-pilot/
 # Install dependencies
 bun install
 
-# Build native host binary
+# Build native host binary (for local development)
 bun run build:host
 
 # Install native host (registers with Firefox)
@@ -60,8 +70,9 @@ bun run install-host
 # 1. Go to about:debugging#/runtime/this-firefox
 # 2. Load packages/extension/src/manifest.json
 
-# Start the WebSocket server
-bun run start
+# Run CLI (works with both Bun and Node.js 24+)
+bun run packages/cli/src/cli.ts help
+node packages/cli/src/cli.ts help
 
 # Run tests
 bun run test
@@ -78,17 +89,21 @@ bun run typecheck
 - **Native Messaging**: Firefox extension ↔ Native host binary communication
 - **WebSocket**: Agent ↔ Native host communication on localhost:9222
 - **Authentication**: Token-based (FOX_PILOT_TOKEN env var)
-- **Bun**: Used for TypeScript execution and binary compilation
+- **Platform Packages**: Native host compiled to separate npm packages per platform (~58MB each)
+- **No Build Step for CLI**: TypeScript runs directly on Node.js 24+ via native type stripping
 
 ## Key Files
 
 - `packages/client/src/index.ts` - Client library with all browser commands
+- `packages/cli/src/cli.ts` - CLI implementation
 - `packages/native-host/src/host.ts` - WebSocket server implementation
 - `packages/extension/src/background.js` - Extension message routing
 - `packages/extension/src/content.js` - DOM interaction handlers
+- `packages/scripts/src/install-host.ts` - Native host installer
 
 ## Debugging
 
 - Extension logs: Firefox DevTools (about:debugging → Inspect)
 - Native host logs: `/tmp/fox-pilot.log`
 - Check port: `lsof -i :9222`
+- Test CLI: `node packages/cli/src/cli.ts get title`
