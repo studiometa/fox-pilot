@@ -1,12 +1,23 @@
 {
   "name": "@fox-pilot/native-host-linux-x64",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Fox Pilot native host binary for Linux x64",
-  "os": ["linux"],
-  "cpu": ["x64"],
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
   "main": "bin/fox-pilot-host",
-  "files": ["bin/"],
-  "keywords": ["fox-pilot", "native-host", "linux", "x64"],
+  "files": [
+    "bin/"
+  ],
+  "keywords": [
+    "fox-pilot",
+    "native-host",
+    "linux",
+    "x64"
+  ],
   "author": "Titouan Mathis",
   "license": "MIT",
   "publishConfig": {

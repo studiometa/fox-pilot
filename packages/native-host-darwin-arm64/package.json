@@ -1,12 +1,23 @@
 {
   "name": "@fox-pilot/native-host-darwin-arm64",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Fox Pilot native host binary for macOS ARM64",
-  "os": ["darwin"],
-  "cpu": ["arm64"],
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
   "main": "bin/fox-pilot-host",
-  "files": ["bin/"],
-  "keywords": ["fox-pilot", "native-host", "darwin", "arm64"],
+  "files": [
+    "bin/"
+  ],
+  "keywords": [
+    "fox-pilot",
+    "native-host",
+    "darwin",
+    "arm64"
+  ],
   "author": "Titouan Mathis",
   "license": "MIT",
   "publishConfig": {

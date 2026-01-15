@@ -1,24 +1,30 @@
 {
   "name": "@fox-pilot/native-host",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Native messaging host for Fox Pilot extension",
   "type": "module",
   "main": "./src/host.ts",
-  "files": ["src/"],
+  "files": [
+    "src/"
+  ],
   "scripts": {
     "start": "bun run src/host.ts",
     "build": "bun build src/host.ts --compile --outfile dist/fox-pilot-host"
   },
-  "keywords": ["firefox", "native-messaging", "websocket"],
+  "keywords": [
+    "firefox",
+    "native-messaging",
+    "websocket"
+  ],
   "author": "Titouan Mathis",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "optionalDependencies": {
-    "@fox-pilot/native-host-darwin-arm64": "0.2.1",
-    "@fox-pilot/native-host-darwin-x64": "0.2.1",
-    "@fox-pilot/native-host-linux-x64": "0.2.1"
+    "@fox-pilot/native-host-darwin-arm64": "0.3.0",
+    "@fox-pilot/native-host-darwin-x64": "0.3.0",
+    "@fox-pilot/native-host-linux-x64": "0.3.0"
   },
   "repository": {
     "type": "git",

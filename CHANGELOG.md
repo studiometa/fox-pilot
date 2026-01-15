@@ -6,6 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## v0.3.0 - 2026.01.15
+
+### Added
+
+- Add auto-generated authentication token on first use ([c3c7dcd](https://github.com/studiometa/fox-pilot/commit/c3c7dcd))
+- Add native host tests for message protocol and token management ([1b1495c](https://github.com/studiometa/fox-pilot/commit/1b1495c))
+- Add client package README with full API reference ([5da4766](https://github.com/studiometa/fox-pilot/commit/5da4766))
+- Add stricter TypeScript compiler options (`noUncheckedIndexedAccess`, `allowImportingTsExtensions`) ([f0a7d5f](https://github.com/studiometa/fox-pilot/commit/f0a7d5f))
+
+### Changed
+
+- Refactor CLI into modular structure with separate command files ([485efa3](https://github.com/studiometa/fox-pilot/commit/485efa3))
+- Use native `node:util` parseArgs for CLI argument parsing ([b97efac](https://github.com/studiometa/fox-pilot/commit/b97efac))
+- Use `node:` prefix for Node.js built-in module imports ([f64921c](https://github.com/studiometa/fox-pilot/commit/f64921c))
+- Read CLI version from package.json instead of hardcoded value ([d7e4cfb](https://github.com/studiometa/fox-pilot/commit/d7e4cfb))
+
+### Removed
+
+- Remove unused utils.js from extension ([4e12770](https://github.com/studiometa/fox-pilot/commit/4e12770))
+
+### Security
+
+- Token auto-generated with `crypto.randomBytes(32)` and stored with 0600 permissions ([c3c7dcd](https://github.com/studiometa/fox-pilot/commit/c3c7dcd))
+- Remove default fallback token - explicit configuration now required ([c3c7dcd](https://github.com/studiometa/fox-pilot/commit/c3c7dcd))
+
 ## v0.2.1 - 2026.01.15
 
 ### Added
