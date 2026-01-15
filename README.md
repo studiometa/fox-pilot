@@ -286,6 +286,14 @@ fox-pilot/
 5. Commit with imperative mood ("Add feature", "Fix bug")
 6. Push and open a Pull Request
 
+## Acknowledgements
+
+Fox Pilot was inspired by these great projects:
+
+- [agent-browser](https://github.com/vercel-labs/agent-browser) — Browser automation CLI for AI agents by Vercel Labs
+- [playwriter](https://github.com/remorses/playwriter) — MCP server for browser automation
+- [alfred-firefox](https://github.com/deanishe/alfred-firefox) — Control Firefox from Alfred using native messaging
+
 ## License
 
 MIT
