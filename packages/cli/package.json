@@ -4,11 +4,10 @@
   "description": "CLI for Fox Pilot browser automation",
   "type": "module",
   "bin": {
-    "fox-pilot": "./bin/fox-pilot"
+    "fox-pilot": "./dist/cli.js"
   },
   "files": [
-    "bin/",
-    "src/"
+    "dist/"
   ],
   "keywords": [
     "firefox",
@@ -19,6 +18,9 @@
   "license": "MIT",
   "engines": {
     "node": ">=24.0.0"
+  },
+  "scripts": {
+    "build": "vite build"
   },
   "publishConfig": {
     "access": "public"

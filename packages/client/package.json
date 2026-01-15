@@ -3,12 +3,16 @@
   "version": "0.3.1",
   "description": "Client library for Fox Pilot browser automation",
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "types": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
   },
   "files": [
+    "dist/",
     "src/"
   ],
   "keywords": [
@@ -21,6 +25,9 @@
   "license": "MIT",
   "engines": {
     "node": ">=24.0.0"
+  },
+  "scripts": {
+    "build": "vite build"
   },
   "publishConfig": {
     "access": "public"

@@ -17,6 +17,9 @@
     "start": "bun run --cwd packages/native-host start",
     "install-host": "bun run --cwd packages/scripts install",
     "uninstall-host": "bun run --cwd packages/scripts uninstall",
+    "build": "bun run build:client && bun run build:cli",
+    "build:client": "bun run --cwd packages/client build",
+    "build:cli": "bun run --cwd packages/cli build",
     "build:host": "bun build packages/native-host/src/host.ts --compile --outfile packages/native-host/dist/fox-pilot-host",
     "build:host:all": "bun build packages/native-host/src/host.ts --compile --outfile packages/native-host-darwin-arm64/bin/fox-pilot-host && echo 'Note: Cross-compilation not supported. Run on each target platform.'",
     "lint": "bunx oxlint --tsconfig tsconfig.json packages/",
@@ -45,6 +48,7 @@
   "devDependencies": {
     "bun-types": "latest",
     "typescript": "^5.0.0",
+    "vite": "^8.0.0-beta.8",
     "vitest": "^4.0.17"
   }
 }

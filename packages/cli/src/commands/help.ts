@@ -2,13 +2,9 @@
  * Help Command
  */
 
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const pkg = JSON.parse(readFileSync(join(__dirname, '..', '..', 'package.json'), 'utf-8')) as { version: string };
-export const VERSION = pkg.version;
+// Version is injected at build time via Vite's define
+declare const __CLI_VERSION__: string;
+export const VERSION = typeof __CLI_VERSION__ !== 'undefined' ? __CLI_VERSION__ : 'dev';
 
 export async function help(): Promise<void> {
   console.log(`

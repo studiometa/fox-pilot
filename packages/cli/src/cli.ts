@@ -1,5 +1,3 @@
-#!/usr/bin/env -S node --experimental-transform-types
-
 /**
  * Fox Pilot CLI
  *

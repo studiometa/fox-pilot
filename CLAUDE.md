@@ -50,7 +50,7 @@ fox-pilot/
 
 ## Runtime Requirements
 
-- **CLI/Client**: Node.js 24+ (native TypeScript type stripping, no build step)
+- **CLI/Client**: Node.js 24+ (compiled to JavaScript via Vite for npm distribution)
 - **Native Host**: Compiled binary (no runtime needed)
 - **Development**: Bun (for building binaries, running tests)
 
@@ -70,9 +70,14 @@ bun run install-host
 # 1. Go to about:debugging#/runtime/this-firefox
 # 2. Load packages/extension/src/manifest.json
 
-# Run CLI (works with both Bun and Node.js 24+)
+# Build client and CLI (required before publishing)
+bun run build
+
+# Run CLI in development (from source)
 bun run packages/cli/src/cli.ts help
-node packages/cli/src/cli.ts help
+
+# Run CLI from built output
+node packages/cli/dist/cli.js help
 
 # Run tests
 bun run test
@@ -90,7 +95,7 @@ bun run typecheck
 - **WebSocket**: Agent ↔ Native host communication on localhost:9222
 - **Authentication**: Token-based (FOX_PILOT_TOKEN env var)
 - **Platform Packages**: Native host compiled to separate npm packages per platform (~58MB each)
-- **No Build Step for CLI**: TypeScript runs directly on Node.js 24+ via native type stripping
+- **Vite Build**: Client and CLI are built with Vite 8 (Rolldown) for npm distribution
 
 ## Key Files
 
@@ -106,4 +111,4 @@ bun run typecheck
 - Extension logs: Firefox DevTools (about:debugging → Inspect)
 - Native host logs: `/tmp/fox-pilot.log`
 - Check port: `lsof -i :9222`
-- Test CLI: `node packages/cli/src/cli.ts get title`
+- Test CLI: `bun run packages/cli/src/cli.ts get title`
