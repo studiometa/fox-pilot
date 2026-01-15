@@ -7,6 +7,9 @@
 
 > CLI tool for AI agents to control Firefox via WebSocket. Navigate, click, fill forms, take screenshots, and extract data from your browser.
 
+> [!WARNING]
+> **Experimental Project** — This project was entirely built by AI coding agents (Claude). While functional, it may contain bugs, security issues, or unexpected behavior. Use at your own risk, especially in production environments or with sensitive data.
+
 ## Installation
 
 ### 1. Install the Firefox Extension
