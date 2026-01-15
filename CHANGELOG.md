@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## v0.2.1 - 2026.01.15
+
+### Changed
+
+- Switch to npm trusted publishing via OIDC ([7df7e34](https://github.com/studiometa/fox-pilot/commit/7df7e34))
+
+### Fixed
+
+- Fix CLI bin script for npm compatibility ([40c3263](https://github.com/studiometa/fox-pilot/commit/40c3263))
+- Fix scripts bin and switch from Bun to Node shebang ([3d0f1ba](https://github.com/studiometa/fox-pilot/commit/3d0f1ba))
+- Fix repository URLs in platform packages ([20000aa](https://github.com/studiometa/fox-pilot/commit/20000aa))
+
 ## v0.2.0 - 2026.01.15
 
 ### Added
