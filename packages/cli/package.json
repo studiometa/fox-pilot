@@ -4,7 +4,7 @@
   "description": "CLI for Fox Pilot browser automation",
   "type": "module",
   "bin": {
-    "fox-pilot": "./src/cli.ts"
+    "fox-pilot": "./src/cli"
   },
   "files": ["src/"],
   "keywords": ["firefox", "browser-automation", "cli"],
