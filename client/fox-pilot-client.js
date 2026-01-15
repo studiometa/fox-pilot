@@ -1,11 +1,11 @@
 /**
- * FoxPilot Client
+ * Fox Pilot Client
  *
  * A simple client library for coding agents to control Firefox.
  *
  * @example
  * ```javascript
- * import { FoxPilotClient } from './foxpilot-client.js';
+ * import { FoxPilotClient } from './fox-pilot-client.js';
  *
  * const client = new FoxPilotClient();
  * await client.connect();
@@ -19,7 +19,7 @@
 export class FoxPilotClient {
   constructor(options = {}) {
     this.url = options.url || 'ws://localhost:9222';
-    this.token = options.token || process.env.FOXPILOT_TOKEN || 'default-dev-token';
+    this.token = options.token || process.env.FOX_PILOT_TOKEN || 'default-dev-token';
     this.ws = null;
     this.requestId = 0;
     this.pendingRequests = new Map();
@@ -27,7 +27,7 @@ export class FoxPilotClient {
   }
 
   /**
-   * Connect to FoxPilot server
+   * Connect to Fox Pilot server
    * @returns {Promise<void>}
    */
   async connect() {

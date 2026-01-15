@@ -1,22 +1,22 @@
 ---
-name: foxpilot
-description: Firefox browser automation CLI for AI agents. Use when users ask to automate Firefox, navigate websites, fill forms, take screenshots, extract web data, or test web apps in Firefox. Trigger phrases include "in Firefox", "foxpilot", "go to [url]", "click on", "fill out the form", "take a screenshot", "scrape", "automate", or any browser interaction request mentioning Firefox.
+name: fox-pilot
+description: Firefox browser automation CLI for AI agents. Use when users ask to automate Firefox, navigate websites, fill forms, take screenshots, extract web data, or test web apps in Firefox. Trigger phrases include "in Firefox", "fox-pilot", "go to [url]", "click on", "fill out the form", "take a screenshot", "scrape", "automate", or any browser interaction request mentioning Firefox.
 ---
 
-# FoxPilot Skill
+# Fox Pilot Skill
 
 CLI-based Firefox browser automation optimized for AI agents. Simple commands, persistent sessions, accessibility snapshots with refs.
 
-**Difference from agent-browser:** FoxPilot controls a real Firefox browser (not Chromium), preserving your existing session, cookies, and extensions.
+**Difference from agent-browser:** Fox Pilot controls a real Firefox browser (not Chromium), preserving your existing session, cookies, and extensions.
 
 ## Setup
 
 ```bash
 # Install the package
-npm install -g foxpilot
+npm install -g fox-pilot
 
 # Install native messaging host (run once)
-foxpilot install-host
+fox-pilot install-host
 
 # Load extension in Firefox
 # 1. Go to about:debugging#/runtime/this-firefox
@@ -27,11 +27,11 @@ foxpilot install-host
 ## Quick Start
 
 ```bash
-foxpilot open example.com
-foxpilot snapshot                    # Get accessibility tree with refs
-foxpilot click @e2                   # Click by ref from snapshot
-foxpilot fill @e3 "test@example.com" # Fill by ref
-foxpilot screenshot /tmp/page.png
+fox-pilot open example.com
+fox-pilot snapshot                    # Get accessibility tree with refs
+fox-pilot click @e2                   # Click by ref from snapshot
+fox-pilot fill @e3 "test@example.com" # Fill by ref
+fox-pilot screenshot /tmp/page.png
 ```
 
 ## Workflow Pattern
@@ -47,10 +47,10 @@ foxpilot screenshot /tmp/page.png
 ### Navigation
 
 ```bash
-foxpilot open <url>               # Navigate to URL
-foxpilot back                     # Go back
-foxpilot forward                  # Go forward
-foxpilot reload                   # Reload page
+fox-pilot open <url>               # Navigate to URL
+fox-pilot back                     # Go back
+fox-pilot forward                  # Go forward
+fox-pilot reload                   # Reload page
 ```
 
 ### Snapshot (Element Discovery)
@@ -58,7 +58,7 @@ foxpilot reload                   # Reload page
 The snapshot command returns an accessibility tree with refs for each element:
 
 ```bash
-foxpilot snapshot
+fox-pilot snapshot
 # Output:
 # - heading "Example Domain" [ref=@e1] [level=1]
 # - button "Submit" [ref=@e2]
@@ -69,11 +69,11 @@ foxpilot snapshot
 #### Snapshot Options
 
 ```bash
-foxpilot snapshot -i              # Interactive elements only (buttons, inputs, links)
-foxpilot snapshot -c              # Compact (remove empty structural elements)
-foxpilot snapshot -d 3            # Limit depth to 3 levels
-foxpilot snapshot -s "#main"      # Scope to CSS selector
-foxpilot snapshot -i -c -d 5      # Combine options
+fox-pilot snapshot -i              # Interactive elements only (buttons, inputs, links)
+fox-pilot snapshot -c              # Compact (remove empty structural elements)
+fox-pilot snapshot -d 3            # Limit depth to 3 levels
+fox-pilot snapshot -s "#main"      # Scope to CSS selector
+fox-pilot snapshot -i -c -d 5      # Combine options
 ```
 
 **Recommended:** Use `snapshot -i -c` for most cases - shows only actionable elements.
@@ -81,77 +81,77 @@ foxpilot snapshot -i -c -d 5      # Combine options
 ### Interactions
 
 ```bash
-foxpilot click <sel>              # Click element
-foxpilot dblclick <sel>           # Double-click
-foxpilot fill <sel> <text>        # Clear and fill input
-foxpilot type <sel> <text>        # Type into element (append)
-foxpilot press <key> [sel]        # Press key (Enter, Tab, Control+a)
-foxpilot select <sel> <val>       # Select dropdown option
-foxpilot check <sel>              # Check checkbox
-foxpilot uncheck <sel>            # Uncheck checkbox
-foxpilot scroll <dir> [px]        # Scroll (up/down/left/right)
-foxpilot hover <sel>              # Hover element
+fox-pilot click <sel>              # Click element
+fox-pilot dblclick <sel>           # Double-click
+fox-pilot fill <sel> <text>        # Clear and fill input
+fox-pilot type <sel> <text>        # Type into element (append)
+fox-pilot press <key> [sel]        # Press key (Enter, Tab, Control+a)
+fox-pilot select <sel> <val>       # Select dropdown option
+fox-pilot check <sel>              # Check checkbox
+fox-pilot uncheck <sel>            # Uncheck checkbox
+fox-pilot scroll <dir> [px]        # Scroll (up/down/left/right)
+fox-pilot hover <sel>              # Hover element
 ```
 
 ### Get Information
 
 ```bash
-foxpilot get text <sel>           # Get text content
-foxpilot get html <sel>           # Get innerHTML
-foxpilot get value <sel>          # Get input value
-foxpilot get attr <sel> <attr>    # Get attribute
-foxpilot get title                # Get page title
-foxpilot get url                  # Get current URL
-foxpilot get count <sel>          # Count matching elements
+fox-pilot get text <sel>           # Get text content
+fox-pilot get html <sel>           # Get innerHTML
+fox-pilot get value <sel>          # Get input value
+fox-pilot get attr <sel> <attr>    # Get attribute
+fox-pilot get title                # Get page title
+fox-pilot get url                  # Get current URL
+fox-pilot get count <sel>          # Count matching elements
 ```
 
 ### Check State
 
 ```bash
-foxpilot is visible <sel>         # Check if visible
-foxpilot is enabled <sel>         # Check if enabled
-foxpilot is checked <sel>         # Check if checked
+fox-pilot is visible <sel>         # Check if visible
+fox-pilot is enabled <sel>         # Check if enabled
+fox-pilot is checked <sel>         # Check if checked
 ```
 
 ### Screenshots
 
 ```bash
-foxpilot screenshot [path]        # Take screenshot
-foxpilot screenshot -f [path]     # Full page screenshot
+fox-pilot screenshot [path]        # Take screenshot
+fox-pilot screenshot -f [path]     # Full page screenshot
 ```
 
 ### Waiting
 
 ```bash
-foxpilot wait <selector>          # Wait for element visible
-foxpilot wait 2000                # Wait 2 seconds
-foxpilot wait --text "Welcome"    # Wait for text
-foxpilot wait --url "**/success"  # Wait for URL pattern
+fox-pilot wait <selector>          # Wait for element visible
+fox-pilot wait 2000                # Wait 2 seconds
+fox-pilot wait --text "Welcome"    # Wait for text
+fox-pilot wait --url "**/success"  # Wait for URL pattern
 ```
 
 ### Semantic Locators (find command)
 
 ```bash
-foxpilot find role button click --name "Submit"
-foxpilot find text "Sign In" click
-foxpilot find label "Email" fill "test@test.com"
-foxpilot find placeholder "Search" fill "query"
+fox-pilot find role button click --name "Submit"
+fox-pilot find text "Sign In" click
+fox-pilot find label "Email" fill "test@test.com"
+fox-pilot find placeholder "Search" fill "query"
 ```
 
 ### Tabs
 
 ```bash
-foxpilot tab                      # List tabs
-foxpilot tab new [url]            # New tab
-foxpilot tab 2                    # Switch to tab 2
-foxpilot tab close                # Close current tab
+fox-pilot tab                      # List tabs
+fox-pilot tab new [url]            # New tab
+fox-pilot tab 2                    # Switch to tab 2
+fox-pilot tab close                # Close current tab
 ```
 
 ### JavaScript Execution
 
 ```bash
-foxpilot eval "return document.title"
-foxpilot eval "localStorage.getItem('token')"
+fox-pilot eval "return document.title"
+fox-pilot eval "localStorage.getItem('token')"
 ```
 
 ## Selectors
@@ -161,17 +161,17 @@ foxpilot eval "localStorage.getItem('token')"
 Use refs from snapshot for reliable element selection:
 
 ```bash
-foxpilot click @e2
-foxpilot fill @e3 "value"
-foxpilot get text @e1
+fox-pilot click @e2
+fox-pilot fill @e3 "value"
+fox-pilot get text @e1
 ```
 
 ### CSS Selectors
 
 ```bash
-foxpilot click "#id"
-foxpilot click ".class"
-foxpilot click "button[type=submit]"
+fox-pilot click "#id"
+fox-pilot click ".class"
+fox-pilot click "button[type=submit]"
 ```
 
 ## Common Patterns
@@ -179,45 +179,45 @@ foxpilot click "button[type=submit]"
 ### Login Flow
 
 ```bash
-foxpilot open https://example.com/login
-foxpilot snapshot -i
+fox-pilot open https://example.com/login
+fox-pilot snapshot -i
 # Shows: textbox "Email" [ref=@e1], textbox "Password" [ref=@e2], button "Sign in" [ref=@e3]
-foxpilot fill @e1 "user@example.com"
-foxpilot fill @e2 "password123"
-foxpilot click @e3
-foxpilot wait --url "**/dashboard"
-foxpilot get url
+fox-pilot fill @e1 "user@example.com"
+fox-pilot fill @e2 "password123"
+fox-pilot click @e3
+fox-pilot wait --url "**/dashboard"
+fox-pilot get url
 ```
 
 ### Form Submission
 
 ```bash
-foxpilot open https://example.com/contact
-foxpilot snapshot -i -c
-foxpilot fill @e1 "John Doe"
-foxpilot fill @e2 "john@example.com"
-foxpilot fill @e3 "Hello, this is my message"
-foxpilot click @e4  # Submit button
-foxpilot wait --text "Thank you"
-foxpilot screenshot /tmp/confirmation.png
+fox-pilot open https://example.com/contact
+fox-pilot snapshot -i -c
+fox-pilot fill @e1 "John Doe"
+fox-pilot fill @e2 "john@example.com"
+fox-pilot fill @e3 "Hello, this is my message"
+fox-pilot click @e4  # Submit button
+fox-pilot wait --text "Thank you"
+fox-pilot screenshot /tmp/confirmation.png
 ```
 
 ### Scraping Data
 
 ```bash
-foxpilot open https://example.com/products
-foxpilot snapshot -s ".product-list"
-foxpilot get text ".product-title"
-foxpilot get attr ".product-link" "href"
+fox-pilot open https://example.com/products
+fox-pilot snapshot -s ".product-list"
+fox-pilot get text ".product-title"
+fox-pilot get attr ".product-link" "href"
 ```
 
 ### Debug Failed Interaction
 
 ```bash
-foxpilot screenshot /tmp/debug.png
-foxpilot get url
-foxpilot get title
-foxpilot snapshot -i
+fox-pilot screenshot /tmp/debug.png
+fox-pilot get url
+fox-pilot get title
+fox-pilot snapshot -i
 ```
 
 ## Options
@@ -249,7 +249,7 @@ lsof -i :9222
 tail -f /tmp/fox-pilot.log
 
 # Reinstall native host
-foxpilot install-host
+fox-pilot install-host
 
 # Reload extension
 # Go to about:debugging#/runtime/this-firefox and click "Reload"

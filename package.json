@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "description": "Firefox extension for remote browser control by coding agents",
   "type": "module",
-  "main": "./client/foxpilot-client.js",
+  "main": "./client/fox-pilot-client.js",
   "exports": {
-    ".": "./client/foxpilot-client.js",
-    "./client": "./client/foxpilot-client.js"
+    ".": "./client/fox-pilot-client.js",
+    "./client": "./client/fox-pilot-client.js"
   },
   "bin": {
-    "foxpilot": "./bin/foxpilot.js"
+    "fox-pilot": "./bin/fox-pilot.js"
   },
   "files": [
     "bin/",

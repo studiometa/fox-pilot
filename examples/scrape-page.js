@@ -6,7 +6,7 @@
  * Demonstrates how to extract data from a webpage.
  */
 
-import { FoxPilotClient } from '../client/foxpilot-client.js';
+import { FoxPilotClient } from '../client/fox-pilot-client.js';
 
 async function main() {
   const client = new FoxPilotClient();

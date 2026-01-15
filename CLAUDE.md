@@ -14,7 +14,7 @@ Firefox extension enabling remote browser control by coding agents (Claude, Curs
 ## Project Structure
 
 ```
-foxpilot/
+fox-pilot/
 ├── extension/          # Firefox extension (Manifest V2)
 │   ├── manifest.json
 │   ├── background.js   # Native messaging + command routing
@@ -47,7 +47,7 @@ node examples/basic-usage.js
 - **Manifest V2**: Chosen for persistent background script (V3 service workers can be killed)
 - **Native Messaging**: Firefox extension ↔ Node.js host communication
 - **WebSocket**: Agent ↔ Native host communication on localhost:9222
-- **Authentication**: Token-based (FOXPILOT_TOKEN env var)
+- **Authentication**: Token-based (FOX_PILOT_TOKEN env var)
 
 ## Debugging
 

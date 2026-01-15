@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
 /**
- * FoxPilot CLI
+ * Fox Pilot CLI
  *
  * Command-line interface for browser automation via Firefox.
  * Inspired by agent-browser for a simple, AI-friendly CLI experience.
  *
  * @example
- * foxpilot open https://example.com
- * foxpilot snapshot -i
- * foxpilot click @e2
- * foxpilot fill @e3 "hello@test.com"
- * foxpilot screenshot /tmp/page.png
+ * fox-pilot open https://example.com
+ * fox-pilot snapshot -i
+ * fox-pilot click @e2
+ * fox-pilot fill @e3 "hello@test.com"
+ * fox-pilot screenshot /tmp/page.png
  */
 
-import { FoxPilotClient } from '../client/foxpilot-client.js';
+import { FoxPilotClient } from '../client/fox-pilot-client.js';
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 
@@ -72,7 +72,7 @@ async function getClient() {
     await client.connect();
     return client;
   } catch (err) {
-    error(`Failed to connect to FoxPilot: ${err.message}. Is the extension running?`);
+    error(`Failed to connect to Fox Pilot: ${err.message}. Is the extension running?`);
   }
 }
 
@@ -93,7 +93,7 @@ const commands = {
 
   async open(args) {
     const url = args[0];
-    if (!url) error('Usage: foxpilot open <url>');
+    if (!url) error('Usage: fox-pilot open <url>');
 
     const fullUrl = url.startsWith('http') ? url : `https://${url}`;
     const client = await getClient();
@@ -146,7 +146,7 @@ const commands = {
 
   async click(args) {
     const selector = args[0];
-    if (!selector) error('Usage: foxpilot click <selector>');
+    if (!selector) error('Usage: fox-pilot click <selector>');
 
     const client = await getClient();
     await client.click(selector);
@@ -155,7 +155,7 @@ const commands = {
 
   async dblclick(args) {
     const selector = args[0];
-    if (!selector) error('Usage: foxpilot dblclick <selector>');
+    if (!selector) error('Usage: fox-pilot dblclick <selector>');
 
     const client = await getClient();
     await client.click(selector);
@@ -166,7 +166,7 @@ const commands = {
   async type(args) {
     const selector = args[0];
     const text = args.slice(1).join(' ');
-    if (!selector || !text) error('Usage: foxpilot type <selector> <text>');
+    if (!selector || !text) error('Usage: fox-pilot type <selector> <text>');
 
     const client = await getClient();
     await client.type(selector, text);
@@ -176,7 +176,7 @@ const commands = {
   async fill(args) {
     const selector = args[0];
     const text = args.slice(1).join(' ');
-    if (!selector || text === undefined) error('Usage: foxpilot fill <selector> <text>');
+    if (!selector || text === undefined) error('Usage: fox-pilot fill <selector> <text>');
 
     const client = await getClient();
     await client.send('fill', { selector, text });
@@ -186,7 +186,7 @@ const commands = {
   async press(args) {
     const key = args[0];
     const selector = args[1];
-    if (!key) error('Usage: foxpilot press <key> [selector]');
+    if (!key) error('Usage: fox-pilot press <key> [selector]');
 
     const client = await getClient();
     await client.send('press', { key, selector });
@@ -196,7 +196,7 @@ const commands = {
   async select(args) {
     const selector = args[0];
     const value = args[1];
-    if (!selector || !value) error('Usage: foxpilot select <selector> <value>');
+    if (!selector || !value) error('Usage: fox-pilot select <selector> <value>');
 
     const client = await getClient();
     const result = await client.send('select', { selector, value });
@@ -205,7 +205,7 @@ const commands = {
 
   async check(args) {
     const selector = args[0];
-    if (!selector) error('Usage: foxpilot check <selector>');
+    if (!selector) error('Usage: fox-pilot check <selector>');
 
     const client = await getClient();
     await client.send('check', { selector });
@@ -214,7 +214,7 @@ const commands = {
 
   async uncheck(args) {
     const selector = args[0];
-    if (!selector) error('Usage: foxpilot uncheck <selector>');
+    if (!selector) error('Usage: fox-pilot uncheck <selector>');
 
     const client = await getClient();
     await client.send('uncheck', { selector });
@@ -223,7 +223,7 @@ const commands = {
 
   async hover(args) {
     const selector = args[0];
-    if (!selector) error('Usage: foxpilot hover <selector>');
+    if (!selector) error('Usage: fox-pilot hover <selector>');
 
     const client = await getClient();
     await client.hover(selector);
@@ -244,7 +244,7 @@ const commands = {
       await client.scrollTo(direction);
       success(`Scrolled to ${direction}`);
     } else {
-      error('Usage: foxpilot scroll <direction|selector> [amount]');
+      error('Usage: fox-pilot scroll <direction|selector> [amount]');
     }
   },
 
@@ -261,25 +261,25 @@ const commands = {
 
     switch (subcommand) {
       case 'text': {
-        if (!selector) error('Usage: foxpilot get text <selector>');
+        if (!selector) error('Usage: fox-pilot get text <selector>');
         const result = await client.getText(selector);
         output({ text: result.text });
         break;
       }
       case 'html': {
-        if (!selector) error('Usage: foxpilot get html <selector>');
+        if (!selector) error('Usage: fox-pilot get html <selector>');
         const result = await client.getHTML(selector);
         output({ html: result.html });
         break;
       }
       case 'value': {
-        if (!selector) error('Usage: foxpilot get value <selector>');
+        if (!selector) error('Usage: fox-pilot get value <selector>');
         const result = await client.send('getValue', { selector });
         output({ value: result.value });
         break;
       }
       case 'attr': {
-        if (!selector || !extra) error('Usage: foxpilot get attr <selector> <attribute>');
+        if (!selector || !extra) error('Usage: fox-pilot get attr <selector> <attribute>');
         const result = await client.getAttribute(selector, extra);
         output({ attribute: extra, value: result.value });
         break;
@@ -295,13 +295,13 @@ const commands = {
         break;
       }
       case 'count': {
-        if (!selector) error('Usage: foxpilot get count <selector>');
+        if (!selector) error('Usage: fox-pilot get count <selector>');
         const result = await client.query(selector);
         output({ count: result.count });
         break;
       }
       default:
-        error('Usage: foxpilot get <text|html|value|attr|title|url|count> [selector] [extra]');
+        error('Usage: fox-pilot get <text|html|value|attr|title|url|count> [selector] [extra]');
     }
   },
 
@@ -313,7 +313,7 @@ const commands = {
     const subcommand = args[0];
     const selector = args[1];
 
-    if (!selector) error('Usage: foxpilot is <visible|enabled|checked> <selector>');
+    if (!selector) error('Usage: fox-pilot is <visible|enabled|checked> <selector>');
 
     const client = await getClient();
 
@@ -334,7 +334,7 @@ const commands = {
         break;
       }
       default:
-        error('Usage: foxpilot is <visible|enabled|checked> <selector>');
+        error('Usage: fox-pilot is <visible|enabled|checked> <selector>');
     }
   },
 
@@ -343,7 +343,7 @@ const commands = {
   // ---------------------------------------------------------------------------
 
   async screenshot(args, flags) {
-    const path = args[0] || '/tmp/foxpilot-screenshot.png';
+    const path = args[0] || '/tmp/fox-pilot-screenshot.png';
     const fullPage = flags.f || flags.full || false;
 
     const client = await getClient();
@@ -404,7 +404,7 @@ const commands = {
       await client.waitForSelector(arg);
       success(`Element appeared: ${arg}`);
     } else {
-      error('Usage: foxpilot wait <selector|ms> [--text "..."] [--url "..."]');
+      error('Usage: fox-pilot wait <selector|ms> [--text "..."] [--url "..."]');
     }
   },
 
@@ -418,7 +418,7 @@ const commands = {
     const action = args[2];
 
     if (!locatorType || !locatorValue) {
-      error('Usage: foxpilot find <role|text|label|placeholder> <value> [action] [--name "..."]');
+      error('Usage: fox-pilot find <role|text|label|placeholder> <value> [action] [--name "..."]');
     }
 
     const client = await getClient();
@@ -522,7 +522,7 @@ const commands = {
         // Switch to tab by index
         const index = parseInt(subcommand);
         if (isNaN(index)) {
-          error('Usage: foxpilot tab [new|close|<index>]');
+          error('Usage: fox-pilot tab [new|close|<index>]');
         }
         const tabs = await client.getTabs();
         if (index < 0 || index >= tabs.length) {
@@ -540,7 +540,7 @@ const commands = {
 
   async eval(args) {
     const code = args.join(' ');
-    if (!code) error('Usage: foxpilot eval <javascript>');
+    if (!code) error('Usage: fox-pilot eval <javascript>');
 
     const client = await getClient();
     const result = await client.evaluate(code);
@@ -558,11 +558,11 @@ const commands = {
 
   async help() {
     console.log(`
-FoxPilot CLI v${VERSION}
+Fox Pilot CLI v${VERSION}
 Browser automation for AI agents via Firefox
 
 USAGE:
-  foxpilot <command> [args] [options]
+  fox-pilot <command> [args] [options]
 
 NAVIGATION:
   open <url>                    Navigate to URL
@@ -643,18 +643,18 @@ SELECTORS:
   element                       CSS tag selector
 
 EXAMPLES:
-  foxpilot open example.com
-  foxpilot snapshot -i -c
-  foxpilot click @e2
-  foxpilot fill @e3 "user@example.com"
-  foxpilot find role button click --name "Submit"
-  foxpilot wait --text "Success"
-  foxpilot screenshot /tmp/result.png
+  fox-pilot open example.com
+  fox-pilot snapshot -i -c
+  fox-pilot click @e2
+  fox-pilot fill @e3 "user@example.com"
+  fox-pilot find role button click --name "Submit"
+  fox-pilot wait --text "Success"
+  fox-pilot screenshot /tmp/result.png
 `);
   },
 
   async version() {
-    console.log(`FoxPilot CLI v${VERSION}`);
+    console.log(`Fox Pilot CLI v${VERSION}`);
   },
 };
 
@@ -727,7 +727,7 @@ async function main() {
 
   const handler = commands[command];
   if (!handler) {
-    error(`Unknown command: ${command}. Run 'foxpilot help' for usage.`);
+    error(`Unknown command: ${command}. Run 'fox-pilot help' for usage.`);
   }
 
   try {

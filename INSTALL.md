@@ -12,7 +12,7 @@
 
 ```bash
 git clone <repository-url>
-cd foxpilot
+cd fox-pilot
 
 # Installer les dépendances du native host
 cd native-host
@@ -31,21 +31,21 @@ Le native host permet à l'extension Firefox de communiquer avec le serveur WebS
 mkdir -p ~/Library/Application\ Support/Mozilla/NativeMessagingHosts
 
 # Copier le manifeste
-cp native-host/manifest.json ~/Library/Application\ Support/Mozilla/NativeMessagingHosts/foxpilot.json
+cp native-host/manifest.json ~/Library/Application\ Support/Mozilla/NativeMessagingHosts/fox-pilot.json
 
 # Éditer le chemin absolu dans le manifeste
 # Remplacer /REPLACE/WITH/ABSOLUTE/PATH/TO par le chemin réel
-nano ~/Library/Application\ Support/Mozilla/NativeMessagingHosts/foxpilot.json
+nano ~/Library/Application\ Support/Mozilla/NativeMessagingHosts/fox-pilot.json
 ```
 
 Exemple de manifeste configuré :
 ```json
 {
-  "name": "foxpilot",
+  "name": "fox_pilot",
   "description": "Fox Pilot native messaging host",
-  "path": "/Users/votre-nom/Lab/foxpilot/native-host/host.js",
+  "path": "/Users/votre-nom/Lab/fox-pilot/native-host/host.js",
   "type": "stdio",
-  "allowed_extensions": ["foxpilot@example.com"]
+  "allowed_extensions": ["fox-pilot@ikko.fr"]
 }
 ```
 
@@ -53,16 +53,16 @@ Exemple de manifeste configuré :
 
 ```bash
 mkdir -p ~/.mozilla/native-messaging-hosts
-cp native-host/manifest.json ~/.mozilla/native-messaging-hosts/foxpilot.json
+cp native-host/manifest.json ~/.mozilla/native-messaging-hosts/fox-pilot.json
 # Éditer le chemin absolu
-nano ~/.mozilla/native-messaging-hosts/foxpilot.json
+nano ~/.mozilla/native-messaging-hosts/fox-pilot.json
 ```
 
 #### Windows
 
 ```powershell
 # Créer la clé de registre
-# HKEY_CURRENT_USER\Software\Mozilla\NativeMessagingHosts\foxpilot
+# HKEY_CURRENT_USER\Software\Mozilla\NativeMessagingHosts\fox_pilot
 # Valeur par défaut = chemin vers le manifeste JSON
 ```
 
@@ -83,7 +83,7 @@ chmod +x native-host/host.js
 
 ```bash
 # Optionnel : définir un token d'authentification personnalisé
-export FOXPILOT_TOKEN="votre-token-secret"
+export FOX_PILOT_TOKEN="votre-token-secret"
 
 # Démarrer le native host (normalement lancé automatiquement par Firefox)
 npm start

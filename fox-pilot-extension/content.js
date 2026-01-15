@@ -1,5 +1,5 @@
 /**
- * FoxPilot - Content Script
+ * Fox Pilot - Content Script
  *
  * Runs in the context of web pages and handles DOM interactions.
  */
@@ -365,5 +365,5 @@
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  console.log('[FoxPilot] Content script loaded');
+  console.log('[Fox Pilot] Content script loaded');
 })();

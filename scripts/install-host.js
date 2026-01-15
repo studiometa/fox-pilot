@@ -47,7 +47,7 @@ function createManifest() {
 
   return {
     name: HOST_NAME,
-    description: 'FoxPilot native messaging host',
+    description: 'Fox Pilot native messaging host',
     path: hostPath,
     type: 'stdio',
     allowed_extensions: [EXTENSION_ID],
@@ -58,7 +58,7 @@ function createManifest() {
  * Install the native messaging host
  */
 function install() {
-  console.log('Installing FoxPilot native messaging host...\n');
+  console.log('Installing Fox Pilot native messaging host...\n');
 
   const hostsDir = getNativeHostsDir();
   const manifestPath = join(hostsDir, `${HOST_NAME}.json`);
@@ -110,7 +110,7 @@ function install() {
 async function uninstall() {
   const { unlinkSync } = await import('fs');
 
-  console.log('Uninstalling FoxPilot native messaging host...\n');
+  console.log('Uninstalling Fox Pilot native messaging host...\n');
 
   const hostsDir = getNativeHostsDir();
   const manifestPath = join(hostsDir, `${HOST_NAME}.json`);

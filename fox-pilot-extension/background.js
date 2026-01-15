@@ -1,5 +1,5 @@
 /**
- * FoxPilot - Background Script
+ * Fox Pilot - Background Script
  *
  * Handles communication between native messaging host and content scripts.
  * Acts as the central hub for all browser control operations.
@@ -21,9 +21,9 @@ function connectToNativeHost() {
 
     nativePort.onDisconnect.addListener((port) => {
       const error = port.error || browser.runtime.lastError;
-      console.log('[FoxPilot] Disconnected from native host');
+      console.log('[Fox Pilot] Disconnected from native host');
       if (error) {
-        console.error('[FoxPilot] Disconnect reason:', error.message || error);
+        console.error('[Fox Pilot] Disconnect reason:', error.message || error);
       }
       isConnected = false;
       nativePort = null;
@@ -33,9 +33,9 @@ function connectToNativeHost() {
     });
 
     isConnected = true;
-    console.log('[FoxPilot] Connected to native host');
+    console.log('[Fox Pilot] Connected to native host');
   } catch (error) {
-    console.error('[FoxPilot] Failed to connect to native host:', error);
+    console.error('[Fox Pilot] Failed to connect to native host:', error);
     setTimeout(connectToNativeHost, 5000);
   }
 }
@@ -318,4 +318,4 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-console.log('[FoxPilot] Extension loaded');
+console.log('[Fox Pilot] Extension loaded');

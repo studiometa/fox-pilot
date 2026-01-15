@@ -1,5 +1,5 @@
 /**
- * FoxPilot - Popup Script
+ * Fox Pilot - Popup Script
  */
 
 const statusIndicator = document.getElementById('statusIndicator');
