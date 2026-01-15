@@ -7,13 +7,9 @@
  * for the current operating system.
  */
 
-import { writeFileSync, mkdirSync, chmodSync, unlinkSync } from 'fs';
+import { writeFileSync, mkdirSync, chmodSync, unlinkSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
-import { platform, homedir } from 'os';
-
-// Resolve the native-host package location
-const nativeHostPkgPath = require.resolve('@fox-pilot/native-host/package.json');
-const nativeHostDir = dirname(nativeHostPkgPath);
+import { platform, homedir, arch } from 'os';
 
 const HOST_NAME = 'fox_pilot';
 const EXTENSION_ID = 'fox-pilot@ikko.fr';
@@ -24,6 +20,54 @@ interface NativeHostManifest {
   path: string;
   type: 'stdio';
   allowed_extensions: string[];
+}
+
+/**
+ * Get the platform-specific package name
+ */
+function getPlatformPackage(): string {
+  const os = platform();
+  const cpu = arch();
+
+  if (os === 'darwin' && cpu === 'arm64') {
+    return '@fox-pilot/native-host-darwin-arm64';
+  } else if (os === 'darwin' && cpu === 'x64') {
+    return '@fox-pilot/native-host-darwin-x64';
+  } else if (os === 'linux' && cpu === 'x64') {
+    return '@fox-pilot/native-host-linux-x64';
+  } else {
+    throw new Error(`Unsupported platform: ${os}-${cpu}`);
+  }
+}
+
+/**
+ * Find the native host binary path
+ */
+function findBinaryPath(): string {
+  const platformPkg = getPlatformPackage();
+  
+  // Try to find the platform-specific package
+  try {
+    const pkgPath = require.resolve(`${platformPkg}/package.json`);
+    const binPath = join(dirname(pkgPath), 'bin', 'fox-pilot-host');
+    
+    if (existsSync(binPath)) {
+      return binPath;
+    }
+  } catch {
+    // Package not found, fall through
+  }
+
+  // Fallback: check for local dev build
+  const localBuild = join(dirname(require.resolve('@fox-pilot/native-host/package.json')), 'dist', 'fox-pilot-host');
+  if (existsSync(localBuild)) {
+    return localBuild;
+  }
+
+  throw new Error(
+    `Native host binary not found. Please ensure ${platformPkg} is installed.\n` +
+    `Run: npm install ${platformPkg}`
+  );
 }
 
 /**
@@ -47,14 +91,11 @@ function getNativeHostsDir(): string {
 /**
  * Create the native messaging host manifest
  */
-function createManifest(): NativeHostManifest {
-  // Use compiled binary
-  const hostPath = join(nativeHostDir, 'dist', 'fox-pilot-host');
-
+function createManifest(binaryPath: string): NativeHostManifest {
   return {
     name: HOST_NAME,
     description: 'Fox Pilot native messaging host',
-    path: hostPath,
+    path: binaryPath,
     type: 'stdio',
     allowed_extensions: [EXTENSION_ID],
   };
@@ -66,9 +107,19 @@ function createManifest(): NativeHostManifest {
 function install(): void {
   console.log('Installing Fox Pilot native messaging host...\n');
 
+  // Find the binary
+  let binaryPath: string;
+  try {
+    binaryPath = findBinaryPath();
+    console.log(`✓ Found binary: ${binaryPath}`);
+  } catch (error) {
+    console.error(`✗ ${(error as Error).message}`);
+    process.exit(1);
+  }
+
   const hostsDir = getNativeHostsDir();
   const manifestPath = join(hostsDir, `${HOST_NAME}.json`);
-  const manifest = createManifest();
+  const manifest = createManifest(binaryPath);
 
   // Create directory if it doesn't exist
   try {
@@ -84,12 +135,11 @@ function install(): void {
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
   console.log(`✓ Written manifest: ${manifestPath}`);
 
-  // Make host.sh executable (Unix only)
+  // Make binary executable (Unix only)
   if (platform() !== 'win32') {
-    const hostPath = manifest.path;
     try {
-      chmodSync(hostPath, 0o755);
-      console.log(`✓ Made executable: ${hostPath}`);
+      chmodSync(binaryPath, 0o755);
+      console.log(`✓ Made executable: ${binaryPath}`);
     } catch (error) {
       console.warn(`⚠ Could not make executable: ${(error as Error).message}`);
     }

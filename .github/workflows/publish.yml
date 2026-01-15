@@ -16,7 +16,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Type check
         run: bun run typecheck
@@ -27,8 +27,38 @@ jobs:
       - name: Test
         run: bun run test
 
-  publish:
+  build:
     needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-x64
+          - os: macos-latest
+            target: darwin-arm64
+          - os: macos-13
+            target: darwin-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Build native host binary
+        run: |
+          mkdir -p packages/native-host-${{ matrix.target }}/bin
+          bun build packages/native-host/src/host.ts --compile --outfile packages/native-host-${{ matrix.target }}/bin/fox-pilot-host
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-host-${{ matrix.target }}
+          path: packages/native-host-${{ matrix.target }}/bin/fox-pilot-host
+
+  publish:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -45,11 +75,23 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Download all binary artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
-      - name: Build native host binary
-        run: bun run build:host
+      - name: Place binaries in packages
+        run: |
+          mkdir -p packages/native-host-darwin-arm64/bin
+          mkdir -p packages/native-host-darwin-x64/bin
+          mkdir -p packages/native-host-linux-x64/bin
+          cp artifacts/native-host-darwin-arm64/fox-pilot-host packages/native-host-darwin-arm64/bin/
+          cp artifacts/native-host-darwin-x64/fox-pilot-host packages/native-host-darwin-x64/bin/
+          cp artifacts/native-host-linux-x64/fox-pilot-host packages/native-host-linux-x64/bin/
+          chmod +x packages/native-host-*/bin/fox-pilot-host
+
+      - name: Install dependencies
+        run: bun install
 
       - name: Determine npm tag
         run: |
@@ -64,17 +106,30 @@ jobs:
           echo "NPM_TAG=$NPM_TAG" >> $GITHUB_ENV
           echo "IS_PRERELEASE=$IS_PRERELEASE" >> $GITHUB_ENV
 
-      - name: Publish packages to npm
+      - name: Publish platform packages to npm
         run: |
-          for pkg in packages/client packages/cli packages/native-host packages/scripts; do
-            cd $pkg
-            npm publish --provenance --access public --tag ${{ env.NPM_TAG }} || true
+          for pkg in native-host-darwin-arm64 native-host-darwin-x64 native-host-linux-x64; do
+            echo "Publishing @fox-pilot/$pkg..."
+            cd packages/$pkg
+            npm publish --provenance --access public --tag ${{ env.NPM_TAG }}
             cd ../..
           done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - uses: ncipollo/release-action@v1
+      - name: Publish main packages to npm
+        run: |
+          for pkg in client native-host cli scripts; do
+            echo "Publishing @fox-pilot/$pkg..."
+            cd packages/$pkg
+            npm publish --provenance --access public --tag ${{ env.NPM_TAG }}
+            cd ../..
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
         with:
           tag: ${{ github.ref }}
           name: v${{ github.ref_name }}

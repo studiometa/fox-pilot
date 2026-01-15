@@ -4,6 +4,9 @@
   "description": "Installation scripts for Fox Pilot",
   "type": "module",
   "main": "./src/install-host.ts",
+  "bin": {
+    "fox-pilot-install": "./src/install-host.ts"
+  },
   "scripts": {
     "install": "bun run src/install-host.ts",
     "uninstall": "bun run src/install-host.ts --uninstall"

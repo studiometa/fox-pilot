@@ -17,7 +17,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Type check
         run: bun run typecheck
@@ -32,7 +32,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            target: linux-x64
+          - os: macos-latest
+            target: darwin-arm64
+          - os: macos-13
+            target: darwin-x64
     steps:
       - uses: actions/checkout@v4
 
@@ -41,10 +47,13 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Build native host binary
-        run: bun run build:host
+        run: |
+          bun build packages/native-host/src/host.ts --compile --outfile packages/native-host-${{ matrix.target }}/bin/fox-pilot-host
 
       - name: Verify binary exists
-        run: test -f packages/native-host/dist/fox-pilot-host
+        run: |
+          test -f packages/native-host-${{ matrix.target }}/bin/fox-pilot-host
+          ls -lh packages/native-host-${{ matrix.target }}/bin/fox-pilot-host
