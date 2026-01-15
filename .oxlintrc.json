@@ -56,6 +56,7 @@
   "ignorePatterns": [
     "node_modules/",
     "**/dist/",
-    "packages/extension/"
+    "packages/extension/",
+    "**/*.test.ts"
   ]
 }

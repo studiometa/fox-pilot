@@ -11,7 +11,10 @@
     "uninstall-host": "bun run --cwd packages/scripts uninstall",
     "build:host": "bun run --cwd packages/native-host build",
     "lint": "bunx oxlint --tsconfig tsconfig.json packages/",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "firefox",
@@ -29,6 +32,7 @@
   "homepage": "https://github.com/studiometa/fox-pilot#readme",
   "devDependencies": {
     "bun-types": "latest",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.17"
   }
 }
