@@ -1,6 +1,6 @@
 {
   "name": "@fox-pilot/scripts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Installation scripts for Fox Pilot",
   "type": "module",
   "main": "./src/install-host.ts",
@@ -19,6 +19,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@fox-pilot/native-host": "^0.1.0"
+    "@fox-pilot/native-host": "^0.2.0"
   }
 }

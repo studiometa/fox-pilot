@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## v0.2.0 - 2026.01.15
+
 ### Added
 
 - Add platform-specific native host packages for easier installation ([36c6549](https://github.com/studiometa/fox-pilot/commit/36c6549))
@@ -22,6 +24,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Rewrite README to focus on CLI as main package ([3371cce](https://github.com/studiometa/fox-pilot/commit/3371cce))
 - Add experimental project warning disclaimer ([637b9e2](https://github.com/studiometa/fox-pilot/commit/637b9e2))
 - Add acknowledgements section with inspiration links ([b2ede37](https://github.com/studiometa/fox-pilot/commit/b2ede37))
+- Update macOS runner from macos-13 to macos-15-intel in CI ([583d481](https://github.com/studiometa/fox-pilot/commit/583d481))
+
+### Fixed
+
+- Skip native host installation in CI environments ([1ea65e3](https://github.com/studiometa/fox-pilot/commit/1ea65e3))
 
 ## v0.1.0 - 2026.01.14
 
