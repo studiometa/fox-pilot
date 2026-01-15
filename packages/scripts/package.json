@@ -8,7 +8,6 @@
     "fox-pilot-install": "./src/install-host"
   },
   "scripts": {
-    "install": "node --experimental-strip-types src/install-host",
     "uninstall": "node --experimental-strip-types src/install-host --uninstall"
   },
   "files": ["src/"],

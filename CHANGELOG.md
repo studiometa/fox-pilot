@@ -12,7 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Switch to npm trusted publishing via OIDC ([7df7e34](https://github.com/studiometa/fox-pilot/commit/7df7e34))
 - Add Node 24 setup in CI for TypeScript support ([9cd0329](https://github.com/studiometa/fox-pilot/commit/9cd0329))
-- Enable Node experimental type stripping in shebangs and scripts ([72d5aa4](https://github.com/studiometa/fox-pilot/commit/72d5aa4), [0f88b46](https://github.com/studiometa/fox-pilot/commit/0f88b46))
+- Enable Node experimental type stripping in shebangs ([72d5aa4](https://github.com/studiometa/fox-pilot/commit/72d5aa4))
+- Remove auto-install script, set NODE_OPTIONS in CI ([fb64c69](https://github.com/studiometa/fox-pilot/commit/fb64c69))
 
 ### Fixed
 
