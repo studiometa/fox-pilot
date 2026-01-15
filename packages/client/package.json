@@ -12,6 +12,9 @@
   "keywords": ["firefox", "browser-automation", "websocket", "client"],
   "author": "Titouan Mathis",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "publishConfig": {
     "access": "public"
   }

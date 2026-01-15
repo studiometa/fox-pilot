@@ -10,6 +10,9 @@
   "keywords": ["firefox", "browser-automation", "cli"],
   "author": "Titouan Mathis",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "publishConfig": {
     "access": "public"
   },

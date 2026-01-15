@@ -40,6 +40,9 @@
     "url": "https://github.com/studiometa/fox-pilot.git"
   },
   "homepage": "https://github.com/studiometa/fox-pilot#readme",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "devDependencies": {
     "bun-types": "latest",
     "typescript": "^5.0.0",
