@@ -16,6 +16,67 @@
  * ```
  */
 
+import { existsSync, readFileSync } from 'node:fs';
+import { homedir, platform } from 'node:os';
+import { join } from 'node:path';
+
+// =============================================================================
+// Token Management
+// =============================================================================
+
+interface Config {
+  token: string;
+}
+
+/**
+ * Get the configuration directory path (XDG-compliant on Linux/macOS)
+ */
+function getConfigDir(): string {
+  const os = platform();
+
+  if (os === 'win32') {
+    return join(process.env.APPDATA || join(homedir(), 'AppData', 'Roaming'), 'fox-pilot');
+  }
+
+  // XDG Base Directory Specification
+  const xdgConfig = process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
+  return join(xdgConfig, 'fox-pilot');
+}
+
+/**
+ * Get the config file path
+ */
+function getConfigPath(): string {
+  return join(getConfigDir(), 'config.json');
+}
+
+/**
+ * Read the authentication token from config file
+ * Priority: FOX_PILOT_TOKEN env var > config file > error
+ */
+function getAuthToken(): string | null {
+  // Environment variable takes precedence
+  if (process.env.FOX_PILOT_TOKEN) {
+    return process.env.FOX_PILOT_TOKEN;
+  }
+
+  const configPath = getConfigPath();
+
+  // Try to read existing config
+  if (existsSync(configPath)) {
+    try {
+      const config: Config = JSON.parse(readFileSync(configPath, 'utf-8'));
+      if (config.token) {
+        return config.token;
+      }
+    } catch {
+      // Config file exists but is invalid
+    }
+  }
+
+  return null;
+}
+
 // =============================================================================
 // Types
 // =============================================================================
@@ -102,7 +163,16 @@ export class FoxPilotClient {
 
   constructor(options: ClientOptions = {}) {
     this.url = options.url || 'ws://localhost:9222';
-    this.token = options.token || process.env.FOX_PILOT_TOKEN || 'default-dev-token';
+
+    // Token priority: explicit option > env var > config file
+    const token = options.token || getAuthToken();
+    if (!token) {
+      throw new Error(
+        'No authentication token found. ' +
+        'Set FOX_PILOT_TOKEN environment variable or run `fox-pilot install` to generate one.'
+      );
+    }
+    this.token = token;
   }
 
   /**

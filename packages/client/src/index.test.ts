@@ -1,4 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+// Set test token before importing the client
+process.env.FOX_PILOT_TOKEN = 'test-token';
+
 import { FoxPilotClient } from './index';
 
 // Mock WebSocket
@@ -62,7 +66,7 @@ describe('FoxPilotClient', () => {
   });
 
   describe('constructor', () => {
-    it('should use default URL and token', () => {
+    it('should use token from environment variable', () => {
       const client = new FoxPilotClient();
       expect(client).toBeDefined();
     });
@@ -73,6 +77,17 @@ describe('FoxPilotClient', () => {
         token: 'custom-token',
       });
       expect(client).toBeDefined();
+    });
+
+    it('should throw error when no token is available', () => {
+      const originalToken = process.env.FOX_PILOT_TOKEN;
+      delete process.env.FOX_PILOT_TOKEN;
+
+      try {
+        expect(() => new FoxPilotClient()).toThrow('No authentication token found');
+      } finally {
+        process.env.FOX_PILOT_TOKEN = originalToken;
+      }
     });
   });
 
@@ -99,7 +114,7 @@ describe('FoxPilotClient', () => {
       expect(mockWsInstance!.sentMessages).toHaveLength(1);
       const sentAuth = JSON.parse(mockWsInstance!.sentMessages[0]);
       expect(sentAuth.method).toBe('auth');
-      expect(sentAuth.params.token).toBe('default-dev-token');
+      expect(sentAuth.params.token).toBe('test-token');
     });
 
     it('should reject on authentication failure', async () => {
