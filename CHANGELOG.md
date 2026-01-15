@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 - Fix CLI bin script for npm compatibility ([40c3263](https://github.com/studiometa/fox-pilot/commit/40c3263))
-- Fix repository URLs in platform packages ([20000aa](https://github.com/studiometa/fox-pilot/commit/20000aa))
+- Fix repository URLs in all packages for provenance ([20000aa](https://github.com/studiometa/fox-pilot/commit/20000aa), [3d499e1](https://github.com/studiometa/fox-pilot/commit/3d499e1))
 
 ## v0.2.0 - 2026.01.15
 
