@@ -186,6 +186,12 @@ function uninstall(): void {
 // Main
 const args = process.argv.slice(2);
 
+// Skip installation in CI environments
+if (process.env.CI) {
+  console.log('CI environment detected, skipping native host installation.');
+  process.exit(0);
+}
+
 if (args.includes('--uninstall') || args.includes('-u')) {
   uninstall();
 } else {
