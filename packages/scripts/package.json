@@ -3,13 +3,13 @@
   "version": "0.2.0",
   "description": "Installation scripts for Fox Pilot",
   "type": "module",
-  "main": "./src/install-host.ts",
+  "main": "./src/install-host",
   "bin": {
-    "fox-pilot-install": "./src/install-host.ts"
+    "fox-pilot-install": "./src/install-host"
   },
   "scripts": {
-    "install": "bun run src/install-host.ts",
-    "uninstall": "bun run src/install-host.ts --uninstall"
+    "install": "node src/install-host",
+    "uninstall": "node src/install-host --uninstall"
   },
   "files": ["src/"],
   "keywords": ["firefox", "native-messaging", "installer"],
