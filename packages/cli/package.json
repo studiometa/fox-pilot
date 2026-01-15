@@ -4,9 +4,9 @@
   "description": "CLI for Fox Pilot browser automation",
   "type": "module",
   "bin": {
-    "fox-pilot": "./src/cli"
+    "fox-pilot": "./bin/fox-pilot"
   },
-  "files": ["src/"],
+  "files": ["bin/", "src/"],
   "keywords": ["firefox", "browser-automation", "cli"],
   "author": "Titouan Mathis",
   "license": "MIT",
@@ -18,5 +18,10 @@
   },
   "dependencies": {
     "@fox-pilot/client": "^0.2.1"
+  },
+  "optionalDependencies": {
+    "@fox-pilot/native-host-darwin-arm64": "^0.2.1",
+    "@fox-pilot/native-host-darwin-x64": "^0.2.1",
+    "@fox-pilot/native-host-linux-x64": "^0.2.1"
   }
 }

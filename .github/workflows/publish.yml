@@ -125,7 +125,7 @@ jobs:
 
       - name: Publish main packages to npm
         run: |
-          for pkg in client native-host cli scripts; do
+          for pkg in client native-host cli; do
             echo "Publishing @fox-pilot/$pkg..."
             cd packages/$pkg
             npm publish --provenance --access public --tag ${{ env.NPM_TAG }}

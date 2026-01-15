@@ -8,17 +8,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## v0.2.1 - 2026.01.15
 
+### Added
+
+- Add `install` and `uninstall` commands to CLI ([060464b](https://github.com/studiometa/fox-pilot/commit/060464b))
+
 ### Changed
 
 - Switch to npm trusted publishing via OIDC ([7df7e34](https://github.com/studiometa/fox-pilot/commit/7df7e34))
 - Add Node 24 setup in CI for TypeScript support ([9cd0329](https://github.com/studiometa/fox-pilot/commit/9cd0329))
-- Enable Node experimental type stripping in shebangs ([72d5aa4](https://github.com/studiometa/fox-pilot/commit/72d5aa4))
-- Remove auto-install script, set NODE_OPTIONS in CI ([fb64c69](https://github.com/studiometa/fox-pilot/commit/fb64c69))
+- Merge `@fox-pilot/scripts` into `@fox-pilot/cli` ([060464b](https://github.com/studiometa/fox-pilot/commit/060464b))
 
 ### Fixed
 
 - Fix CLI bin script for npm compatibility ([40c3263](https://github.com/studiometa/fox-pilot/commit/40c3263))
-- Fix scripts bin and switch from Bun to Node shebang ([3d0f1ba](https://github.com/studiometa/fox-pilot/commit/3d0f1ba))
 - Fix repository URLs in platform packages ([20000aa](https://github.com/studiometa/fox-pilot/commit/20000aa))
 
 ## v0.2.0 - 2026.01.15
