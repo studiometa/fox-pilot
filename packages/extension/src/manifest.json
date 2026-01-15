@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Fox Pilot",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Remote browser control for coding agents",
   "author": "Titouan Mathis",
 

@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## v0.3.2 - 2026.01.15
+
+### Fixed
+
+- Fix CLI failing with `ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING` when installed from npm ([8155683](https://github.com/studiometa/fox-pilot/commit/8155683))
+
+### Changed
+
+- Build client and CLI to JavaScript with Vite 8 (Rolldown) for npm distribution ([8155683](https://github.com/studiometa/fox-pilot/commit/8155683))
+
 ## v0.3.1 - 2026.01.15
 
 ### Fixed

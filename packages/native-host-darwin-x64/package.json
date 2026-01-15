@@ -1,6 +1,6 @@
 {
   "name": "@fox-pilot/native-host-darwin-x64",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Fox Pilot native host binary for macOS x64",
   "os": [
     "darwin"
