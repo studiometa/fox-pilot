@@ -1,4 +1,4 @@
-# Fox Pilot
+# 🦊 @fox-pilot/cli
 
 [![NPM Version](https://img.shields.io/npm/v/@fox-pilot/cli.svg?style=flat&colorB=3e63dd&colorA=414853)](https://www.npmjs.com/package/@fox-pilot/cli/)
 [![Downloads](https://img.shields.io/npm/dm/@fox-pilot/cli?style=flat&colorB=3e63dd&colorA=414853)](https://www.npmjs.com/package/@fox-pilot/cli/)
