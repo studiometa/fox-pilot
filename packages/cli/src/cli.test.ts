@@ -1,44 +1,5 @@
 import { describe, it, expect } from 'vitest';
-
-// Extract parseArgs function for testing
-function parseArgs(argv: string[]): { args: string[]; flags: Record<string, string | boolean> } {
-  const args: string[] = [];
-  const flags: Record<string, string | boolean> = {};
-
-  let i = 0;
-  while (i < argv.length) {
-    const arg = argv[i];
-
-    if (arg.startsWith('--')) {
-      const key = arg.slice(2);
-      const nextArg = argv[i + 1];
-
-      if (nextArg && !nextArg.startsWith('-')) {
-        flags[key] = nextArg;
-        i += 2;
-      } else {
-        flags[key] = true;
-        i++;
-      }
-    } else if (arg.startsWith('-') && arg.length === 2) {
-      const key = arg.slice(1);
-      const nextArg = argv[i + 1];
-
-      if (nextArg && !nextArg.startsWith('-')) {
-        flags[key] = nextArg;
-        i += 2;
-      } else {
-        flags[key] = true;
-        i++;
-      }
-    } else {
-      args.push(arg);
-      i++;
-    }
-  }
-
-  return { args, flags };
-}
+import { parseArgs } from './cli';
 
 describe('parseArgs', () => {
   describe('positional arguments', () => {
@@ -82,22 +43,22 @@ describe('parseArgs', () => {
   });
 
   describe('short flags (-f)', () => {
-    it('should parse boolean short flag', () => {
+    it('should parse boolean short flag and expand to long name', () => {
       const result = parseArgs(['snapshot', '-i']);
       expect(result.args).toEqual(['snapshot']);
-      expect(result.flags).toEqual({ i: true });
+      expect(result.flags).toEqual({ interactive: true });
     });
 
-    it('should parse short flag with value', () => {
+    it('should parse short flag with value and expand to long name', () => {
       const result = parseArgs(['snapshot', '-d', '3']);
       expect(result.args).toEqual(['snapshot']);
-      expect(result.flags).toEqual({ d: '3' });
+      expect(result.flags).toEqual({ depth: '3' });
     });
 
-    it('should parse multiple short flags', () => {
+    it('should parse multiple short flags and expand to long names', () => {
       const result = parseArgs(['snapshot', '-i', '-c', '-d', '5']);
       expect(result.args).toEqual(['snapshot']);
-      expect(result.flags).toEqual({ i: true, c: true, d: '5' });
+      expect(result.flags).toEqual({ interactive: true, compact: true, depth: '5' });
     });
   });
 
@@ -122,21 +83,21 @@ describe('parseArgs', () => {
       const result = parseArgs(['snapshot', '-i', '--compact', '-d', '3', '--scope', '#main']);
       expect(result.args).toEqual(['snapshot']);
       expect(result.flags).toEqual({
-        i: true,
+        interactive: true,
         compact: true,
-        d: '3',
+        depth: '3',
         scope: '#main',
       });
     });
   });
 
   describe('edge cases', () => {
-    it('should handle -- as a flag (current behavior)', () => {
+    it('should treat -- as end of flags marker', () => {
       const result = parseArgs(['fill', '#input', '--', 'text']);
-      // Note: current implementation treats -- as a boolean flag with empty key
-      // This documents current behavior - not ideal but functional
-      expect(result.args).toEqual(['fill', '#input']);
-      expect(result.flags).toEqual({ '': 'text' });
+      // Native parseArgs correctly treats -- as end of flags
+      // Everything after -- becomes positional arguments
+      expect(result.args).toEqual(['fill', '#input', 'text']);
+      expect(result.flags).toEqual({});
     });
 
     it('should handle URL-like arguments', () => {

@@ -19,14 +19,15 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, chmodSync, unlinkSy
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { platform, homedir, arch } from 'node:os';
+import { parseArgs as nodeParseArgs } from 'node:util';
 
 // =============================================================================
 // Types
 // =============================================================================
 
-type Flags = Record<string, string | boolean>;
+export type Flags = Record<string, string | boolean | undefined>;
 
-interface ParsedArgs {
+export interface ParsedArgs {
   args: string[];
   flags: Flags;
 }
@@ -236,10 +237,10 @@ const commands: Record<string, (args: string[], flags: Flags) => Promise<void>> 
   async snapshot(_args, flags) {
     const c = await getClient();
     const result = await c.snapshot({
-      interactive: Boolean(flags.i || flags.interactive),
-      compact: Boolean(flags.c || flags.compact),
-      depth: flags.d ? Number(flags.d) : flags.depth ? Number(flags.depth) : null,
-      scope: (flags.s as string) || (flags.scope as string) || null,
+      interactive: Boolean(flags.interactive),
+      compact: Boolean(flags.compact),
+      depth: flags.depth ? Number(flags.depth) : null,
+      scope: (flags.scope as string) || null,
     });
 
     if (outputJson) {
@@ -453,7 +454,7 @@ const commands: Record<string, (args: string[], flags: Flags) => Promise<void>> 
 
   async screenshot(args, flags) {
     const path = args[0] || '/tmp/fox-pilot-screenshot.png';
-    const fullPage = Boolean(flags.f || flags.full);
+    const fullPage = Boolean(flags.full);
 
     const c = await getClient();
     const result = await c.screenshot({ fullPage });
@@ -841,43 +842,45 @@ EXAMPLES:
 // Argument Parsing
 // =============================================================================
 
-function parseArgs(argv: string[]): ParsedArgs {
-  const args: string[] = [];
+/**
+ * CLI options configuration for node:util parseArgs
+ */
+const cliOptions = {
+  // Boolean flags
+  interactive: { type: 'boolean' as const, short: 'i' },
+  compact: { type: 'boolean' as const, short: 'c' },
+  full: { type: 'boolean' as const, short: 'f' },
+  json: { type: 'boolean' as const },
+  help: { type: 'boolean' as const, short: 'h' },
+  version: { type: 'boolean' as const, short: 'v' },
+  exact: { type: 'boolean' as const },
+
+  // String flags
+  depth: { type: 'string' as const, short: 'd' },
+  scope: { type: 'string' as const, short: 's' },
+  name: { type: 'string' as const },
+  index: { type: 'string' as const },
+  text: { type: 'string' as const },
+  url: { type: 'string' as const },
+};
+
+export function parseArgs(argv: string[]): ParsedArgs {
+  const { values, positionals } = nodeParseArgs({
+    args: argv,
+    options: cliOptions,
+    allowPositionals: true,
+    strict: false, // Allow unknown options to pass through
+  });
+
+  // Convert values to Flags format (flatten short aliases)
   const flags: Flags = {};
-
-  let i = 0;
-  while (i < argv.length) {
-    const arg = argv[i];
-
-    if (arg.startsWith('--')) {
-      const key = arg.slice(2);
-      const nextArg = argv[i + 1];
-
-      if (nextArg && !nextArg.startsWith('-')) {
-        flags[key] = nextArg;
-        i += 2;
-      } else {
-        flags[key] = true;
-        i++;
-      }
-    } else if (arg.startsWith('-') && arg.length === 2) {
-      const key = arg.slice(1);
-      const nextArg = argv[i + 1];
-
-      if (nextArg && !nextArg.startsWith('-')) {
-        flags[key] = nextArg;
-        i += 2;
-      } else {
-        flags[key] = true;
-        i++;
-      }
-    } else {
-      args.push(arg);
-      i++;
+  for (const [key, value] of Object.entries(values)) {
+    if (value !== undefined) {
+      flags[key] = value;
     }
   }
 
-  return { args, flags };
+  return { args: positionals, flags };
 }
 
 // =============================================================================
@@ -893,12 +896,12 @@ async function main(): Promise<void> {
   const command = args[0];
   const commandArgs = args.slice(1);
 
-  if (!command || command === 'help' || flags.help || flags.h) {
+  if (!command || command === 'help' || flags.help) {
     await commands.help([], {});
     process.exit(0);
   }
 
-  if (command === 'version' || flags.version || flags.v) {
+  if (command === 'version' || flags.version) {
     await commands.version([], {});
     process.exit(0);
   }
@@ -919,4 +922,8 @@ async function main(): Promise<void> {
   }
 }
 
-main();
+// Only run main() when executed directly, not when imported for testing
+const isTest = process.env.VITEST === 'true' || process.env.NODE_ENV === 'test';
+if (!isTest) {
+  main();
+}
