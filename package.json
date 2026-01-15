@@ -1,52 +1,34 @@
 {
   "name": "fox-pilot",
   "version": "0.1.0",
+  "private": true,
   "description": "Firefox extension for remote browser control by coding agents",
   "type": "module",
-  "main": "./client/fox-pilot-client.js",
-  "exports": {
-    ".": "./client/fox-pilot-client.js",
-    "./client": "./client/fox-pilot-client.js"
-  },
-  "bin": {
-    "fox-pilot": "./bin/fox-pilot.js"
-  },
-  "files": [
-    "bin/",
-    "client/",
-    "native-host/",
-    "scripts/"
-  ],
+  "workspaces": ["packages/*"],
   "scripts": {
-    "start": "node native-host/host.js",
-    "install-host": "node scripts/install-host.js",
-    "uninstall-host": "node scripts/install-host.js --uninstall",
-    "lint": "npx oxlint .",
-    "build": "echo 'Build script TBD'"
+    "start": "bun run --cwd packages/native-host start",
+    "install-host": "bun run --cwd packages/scripts install",
+    "uninstall-host": "bun run --cwd packages/scripts uninstall",
+    "build:host": "bun run --cwd packages/native-host build",
+    "lint": "bunx oxlint packages/",
+    "typecheck": "tsc"
   },
   "keywords": [
     "firefox",
     "extension",
     "browser-automation",
     "remote-control",
-    "coding-agent",
-    "puppeteer-alternative",
-    "playwright-alternative"
+    "coding-agent"
   ],
   "author": "Titouan Mathis",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/studiometa/fox-pilot.git"
   },
   "homepage": "https://github.com/studiometa/fox-pilot#readme",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "dependencies": {
-    "ws": "^8.14.0"
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "^5.0.0"
   }
 }

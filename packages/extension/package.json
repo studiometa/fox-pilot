@@ -1,0 +1,16 @@
+{
+  "name": "@fox-pilot/extension",
+  "version": "0.1.0",
+  "description": "Firefox extension for Fox Pilot browser automation",
+  "private": true,
+  "files": [
+    "src/"
+  ],
+  "keywords": [
+    "firefox",
+    "extension",
+    "browser-automation"
+  ],
+  "author": "Titouan Mathis",
+  "license": "MIT"
+}

@@ -6,7 +6,7 @@
  * Demonstrates how to fill and submit a form.
  */
 
-import { FoxPilotClient } from '../client/fox-pilot-client.js';
+import { FoxPilotClient } from '@fox-pilot/client';
 
 async function main() {
   const client = new FoxPilotClient();

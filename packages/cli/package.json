@@ -1,0 +1,19 @@
+{
+  "name": "@fox-pilot/cli",
+  "version": "0.1.0",
+  "description": "CLI for Fox Pilot browser automation",
+  "type": "module",
+  "bin": {
+    "fox-pilot": "./src/cli.ts"
+  },
+  "files": ["src/"],
+  "keywords": ["firefox", "browser-automation", "cli"],
+  "author": "Titouan Mathis",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@fox-pilot/client": "^0.1.0"
+  }
+}

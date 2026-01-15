@@ -7,7 +7,7 @@
  * to control Firefox from a coding agent or script.
  */
 
-import { FoxPilotClient } from '../client/fox-pilot-client.js';
+import { FoxPilotClient } from '@fox-pilot/client';
 
 async function main() {
   const client = new FoxPilotClient({

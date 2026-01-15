@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 /**
  * Fox Pilot CLI
@@ -14,43 +14,59 @@
  * fox-pilot screenshot /tmp/page.png
  */
 
-import { FoxPilotClient } from '../client/fox-pilot-client.js';
+import { FoxPilotClient } from '@fox-pilot/client';
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
+
+// =============================================================================
+// Types
+// =============================================================================
+
+type Flags = Record<string, string | boolean>;
+
+interface ParsedArgs {
+  args: string[];
+  flags: Flags;
+}
 
 // =============================================================================
 // Configuration
 // =============================================================================
 
 const VERSION = '1.0.0';
-let client = null;
+let client: FoxPilotClient | null = null;
 let outputJson = false;
 
 // =============================================================================
 // Output Helpers
 // =============================================================================
 
-function output(data) {
+function output(data: unknown): void {
   if (outputJson) {
     console.log(JSON.stringify(data, null, 2));
   } else if (typeof data === 'string') {
     console.log(data);
-  } else if (data.text) {
-    console.log(data.text);
-  } else if (data.tree) {
-    console.log(data.text || JSON.stringify(data.tree, null, 2));
+  } else if (data && typeof data === 'object') {
+    if ('text' in data && typeof data.text === 'string') {
+      console.log(data.text);
+    } else if ('tree' in data) {
+      const d = data as { text?: string; tree: unknown };
+      console.log(d.text || JSON.stringify(d.tree, null, 2));
+    } else {
+      console.log(JSON.stringify(data, null, 2));
+    }
   } else {
     console.log(JSON.stringify(data, null, 2));
   }
 }
 
-function success(message) {
+function success(message: string): void {
   if (!outputJson) {
     console.log(`✓ ${message}`);
   }
 }
 
-function error(message, code = 1) {
+function error(message: string, code = 1): never {
   if (outputJson) {
     console.log(JSON.stringify({ error: message }));
   } else {
@@ -63,7 +79,7 @@ function error(message, code = 1) {
 // Client Connection
 // =============================================================================
 
-async function getClient() {
+async function getClient(): Promise<FoxPilotClient> {
   if (client) return client;
 
   client = new FoxPilotClient();
@@ -72,11 +88,12 @@ async function getClient() {
     await client.connect();
     return client;
   } catch (err) {
-    error(`Failed to connect to Fox Pilot: ${err.message}. Is the extension running?`);
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    error(`Failed to connect to Fox Pilot: ${message}. Is the extension running?`);
   }
 }
 
-async function disconnect() {
+function disconnect(): void {
   if (client) {
     client.disconnect();
   }
@@ -86,7 +103,7 @@ async function disconnect() {
 // Commands
 // =============================================================================
 
-const commands = {
+const commands: Record<string, (args: string[], flags: Flags) => Promise<void>> = {
   // ---------------------------------------------------------------------------
   // Navigation
   // ---------------------------------------------------------------------------
@@ -96,26 +113,26 @@ const commands = {
     if (!url) error('Usage: fox-pilot open <url>');
 
     const fullUrl = url.startsWith('http') ? url : `https://${url}`;
-    const client = await getClient();
-    await client.navigate(fullUrl);
+    const c = await getClient();
+    await c.navigate(fullUrl);
     success(`Navigated to ${fullUrl}`);
   },
 
   async back() {
-    const client = await getClient();
-    await client.back();
+    const c = await getClient();
+    await c.back();
     success('Navigated back');
   },
 
   async forward() {
-    const client = await getClient();
-    await client.forward();
+    const c = await getClient();
+    await c.forward();
     success('Navigated forward');
   },
 
   async reload() {
-    const client = await getClient();
-    await client.reload();
+    const c = await getClient();
+    await c.reload();
     success('Page reloaded');
   },
 
@@ -123,13 +140,13 @@ const commands = {
   // Snapshot
   // ---------------------------------------------------------------------------
 
-  async snapshot(args, flags) {
-    const client = await getClient();
-    const result = await client.snapshot({
-      interactive: flags.i || flags.interactive || false,
-      compact: flags.c || flags.compact || false,
-      depth: flags.d || flags.depth || null,
-      scope: flags.s || flags.scope || null,
+  async snapshot(_args, flags) {
+    const c = await getClient();
+    const result = await c.snapshot({
+      interactive: Boolean(flags.i || flags.interactive),
+      compact: Boolean(flags.c || flags.compact),
+      depth: flags.d ? Number(flags.d) : flags.depth ? Number(flags.depth) : null,
+      scope: (flags.s as string) || (flags.scope as string) || null,
     });
 
     if (outputJson) {
@@ -148,8 +165,8 @@ const commands = {
     const selector = args[0];
     if (!selector) error('Usage: fox-pilot click <selector>');
 
-    const client = await getClient();
-    await client.click(selector);
+    const c = await getClient();
+    await c.click(selector);
     success(`Clicked ${selector}`);
   },
 
@@ -157,9 +174,9 @@ const commands = {
     const selector = args[0];
     if (!selector) error('Usage: fox-pilot dblclick <selector>');
 
-    const client = await getClient();
-    await client.click(selector);
-    await client.click(selector);
+    const c = await getClient();
+    await c.click(selector);
+    await c.click(selector);
     success(`Double-clicked ${selector}`);
   },
 
@@ -168,8 +185,8 @@ const commands = {
     const text = args.slice(1).join(' ');
     if (!selector || !text) error('Usage: fox-pilot type <selector> <text>');
 
-    const client = await getClient();
-    await client.type(selector, text);
+    const c = await getClient();
+    await c.type(selector, text);
     success(`Typed into ${selector}`);
   },
 
@@ -178,18 +195,18 @@ const commands = {
     const text = args.slice(1).join(' ');
     if (!selector || text === undefined) error('Usage: fox-pilot fill <selector> <text>');
 
-    const client = await getClient();
-    await client.send('fill', { selector, text });
+    const c = await getClient();
+    await c.fill(selector, text);
     success(`Filled ${selector}`);
   },
 
   async press(args) {
     const key = args[0];
-    const selector = args[1];
+    const selector = args[1] || null;
     if (!key) error('Usage: fox-pilot press <key> [selector]');
 
-    const client = await getClient();
-    await client.send('press', { key, selector });
+    const c = await getClient();
+    await c.press(key, selector);
     success(`Pressed ${key}`);
   },
 
@@ -198,8 +215,8 @@ const commands = {
     const value = args[1];
     if (!selector || !value) error('Usage: fox-pilot select <selector> <value>');
 
-    const client = await getClient();
-    const result = await client.send('select', { selector, value });
+    const c = await getClient();
+    const result = await c.select(selector, value);
     success(`Selected "${result.selectedText}" in ${selector}`);
   },
 
@@ -207,8 +224,8 @@ const commands = {
     const selector = args[0];
     if (!selector) error('Usage: fox-pilot check <selector>');
 
-    const client = await getClient();
-    await client.send('check', { selector });
+    const c = await getClient();
+    await c.check(selector);
     success(`Checked ${selector}`);
   },
 
@@ -216,8 +233,8 @@ const commands = {
     const selector = args[0];
     if (!selector) error('Usage: fox-pilot uncheck <selector>');
 
-    const client = await getClient();
-    await client.send('uncheck', { selector });
+    const c = await getClient();
+    await c.uncheck(selector);
     success(`Unchecked ${selector}`);
   },
 
@@ -225,23 +242,22 @@ const commands = {
     const selector = args[0];
     if (!selector) error('Usage: fox-pilot hover <selector>');
 
-    const client = await getClient();
-    await client.hover(selector);
+    const c = await getClient();
+    await c.hover(selector);
     success(`Hovered ${selector}`);
   },
 
-  async scroll(args, flags) {
+  async scroll(args) {
     const direction = args[0];
     const amount = parseInt(args[1]) || 100;
 
-    const client = await getClient();
+    const c = await getClient();
 
     if (['up', 'down', 'left', 'right'].includes(direction)) {
-      await client.send('scroll', { direction, amount });
+      await c.scroll({ direction: direction as 'up' | 'down' | 'left' | 'right', amount });
       success(`Scrolled ${direction} ${amount}px`);
     } else if (direction) {
-      // Scroll to element
-      await client.scrollTo(direction);
+      await c.scrollTo(direction);
       success(`Scrolled to ${direction}`);
     } else {
       error('Usage: fox-pilot scroll <direction|selector> [amount]');
@@ -257,46 +273,46 @@ const commands = {
     const selector = args[1];
     const extra = args[2];
 
-    const client = await getClient();
+    const c = await getClient();
 
     switch (subcommand) {
       case 'text': {
         if (!selector) error('Usage: fox-pilot get text <selector>');
-        const result = await client.getText(selector);
+        const result = await c.getText(selector);
         output({ text: result.text });
         break;
       }
       case 'html': {
         if (!selector) error('Usage: fox-pilot get html <selector>');
-        const result = await client.getHTML(selector);
+        const result = await c.getHTML(selector);
         output({ html: result.html });
         break;
       }
       case 'value': {
         if (!selector) error('Usage: fox-pilot get value <selector>');
-        const result = await client.send('getValue', { selector });
+        const result = await c.getValue(selector);
         output({ value: result.value });
         break;
       }
       case 'attr': {
         if (!selector || !extra) error('Usage: fox-pilot get attr <selector> <attribute>');
-        const result = await client.getAttribute(selector, extra);
+        const result = await c.getAttribute(selector, extra);
         output({ attribute: extra, value: result.value });
         break;
       }
       case 'title': {
-        const result = await client.getTitle();
+        const result = await c.getTitle();
         output({ title: result.title });
         break;
       }
       case 'url': {
-        const result = await client.getUrl();
+        const result = await c.getUrl();
         output({ url: result.url });
         break;
       }
       case 'count': {
         if (!selector) error('Usage: fox-pilot get count <selector>');
-        const result = await client.query(selector);
+        const result = await c.query(selector);
         output({ count: result.count });
         break;
       }
@@ -315,21 +331,21 @@ const commands = {
 
     if (!selector) error('Usage: fox-pilot is <visible|enabled|checked> <selector>');
 
-    const client = await getClient();
+    const c = await getClient();
 
     switch (subcommand) {
       case 'visible': {
-        const result = await client.send('isVisible', { selector });
+        const result = await c.isVisible(selector);
         output({ visible: result.visible });
         break;
       }
       case 'enabled': {
-        const result = await client.send('isEnabled', { selector });
+        const result = await c.isEnabled(selector);
         output({ enabled: result.enabled });
         break;
       }
       case 'checked': {
-        const result = await client.send('isChecked', { selector });
+        const result = await c.isChecked(selector);
         output({ checked: result.checked });
         break;
       }
@@ -344,17 +360,15 @@ const commands = {
 
   async screenshot(args, flags) {
     const path = args[0] || '/tmp/fox-pilot-screenshot.png';
-    const fullPage = flags.f || flags.full || false;
+    const fullPage = Boolean(flags.f || flags.full);
 
-    const client = await getClient();
-    const result = await client.screenshot({ fullPage });
+    const c = await getClient();
+    const result = await c.screenshot({ fullPage });
 
     if (result.dataUrl) {
-      // Extract base64 data and save to file
       const base64Data = result.dataUrl.replace(/^data:image\/\w+;base64,/, '');
       const buffer = Buffer.from(base64Data, 'base64');
 
-      // Ensure directory exists
       const dir = dirname(path);
       if (!existsSync(dir)) {
         mkdirSync(dir, { recursive: true });
@@ -374,20 +388,18 @@ const commands = {
 
   async wait(args, flags) {
     const arg = args[0];
-    const client = await getClient();
+    const c = await getClient();
 
     if (flags.text) {
-      // Wait for text
-      await client.send('waitForText', { text: flags.text, timeout: 30000 });
+      await c.waitForText(String(flags.text), 30000);
       success(`Found text: "${flags.text}"`);
     } else if (flags.url) {
-      // Wait for URL - poll until match
-      const pattern = flags.url;
+      const pattern = String(flags.url);
       const timeout = 30000;
       const start = Date.now();
 
       while (Date.now() - start < timeout) {
-        const result = await client.getUrl();
+        const result = await c.getUrl();
         if (result.url.includes(pattern.replace('**/', ''))) {
           success(`URL matched: ${result.url}`);
           return;
@@ -395,13 +407,11 @@ const commands = {
         await new Promise((r) => setTimeout(r, 100));
       }
       error(`Timeout waiting for URL: ${pattern}`);
-    } else if (arg && !isNaN(arg)) {
-      // Wait for duration
-      await client.wait(parseInt(arg));
+    } else if (arg && !isNaN(Number(arg))) {
+      await c.wait(parseInt(arg));
       success(`Waited ${arg}ms`);
     } else if (arg) {
-      // Wait for selector
-      await client.waitForSelector(arg);
+      await c.waitForSelector(arg);
       success(`Element appeared: ${arg}`);
     } else {
       error('Usage: fox-pilot wait <selector|ms> [--text "..."] [--url "..."]');
@@ -421,57 +431,52 @@ const commands = {
       error('Usage: fox-pilot find <role|text|label|placeholder> <value> [action] [--name "..."]');
     }
 
-    const client = await getClient();
-    let result;
+    const c = await getClient();
+    let result: { ref: string; [key: string]: unknown };
 
     switch (locatorType) {
       case 'role':
-        result = await client.send('findByRole', {
-          role: locatorValue,
-          name: flags.name,
-          index: flags.index || 0,
+        result = await c.findByRole(locatorValue, {
+          name: flags.name as string,
+          index: flags.index ? Number(flags.index) : 0,
         });
         break;
       case 'text':
-        result = await client.send('findByText', {
-          text: locatorValue,
-          exact: flags.exact || false,
-          index: flags.index || 0,
+        result = await c.findByText(locatorValue, {
+          exact: Boolean(flags.exact),
+          index: flags.index ? Number(flags.index) : 0,
         });
         break;
       case 'label':
-        result = await client.send('findByLabel', {
-          label: locatorValue,
-          index: flags.index || 0,
+        result = await c.findByLabel(locatorValue, {
+          index: flags.index ? Number(flags.index) : 0,
         });
         break;
       case 'placeholder':
-        result = await client.send('findByPlaceholder', {
-          placeholder: locatorValue,
-          index: flags.index || 0,
+        result = await c.findByPlaceholder(locatorValue, {
+          index: flags.index ? Number(flags.index) : 0,
         });
         break;
       default:
         error('Locator type must be: role, text, label, or placeholder');
     }
 
-    // Perform action if specified
     if (action && result.ref) {
       const actionArgs = args.slice(3);
 
       switch (action) {
         case 'click':
-          await client.click(result.ref);
+          await c.click(result.ref);
           success(`Clicked element ${result.ref}`);
           break;
         case 'fill':
           if (!actionArgs[0]) error('fill requires text argument');
-          await client.send('fill', { selector: result.ref, text: actionArgs.join(' ') });
+          await c.fill(result.ref, actionArgs.join(' '));
           success(`Filled element ${result.ref}`);
           break;
         case 'type':
           if (!actionArgs[0]) error('type requires text argument');
-          await client.type(result.ref, actionArgs.join(' '));
+          await c.type(result.ref, actionArgs.join(' '));
           success(`Typed into element ${result.ref}`);
           break;
         default:
@@ -488,11 +493,10 @@ const commands = {
 
   async tab(args) {
     const subcommand = args[0];
-    const client = await getClient();
+    const c = await getClient();
 
     if (!subcommand) {
-      // List tabs
-      const tabs = await client.getTabs();
+      const tabs = await c.getTabs();
       if (outputJson) {
         output(tabs);
       } else {
@@ -507,28 +511,27 @@ const commands = {
     switch (subcommand) {
       case 'new': {
         const url = args[1];
-        const result = await client.newTab(url);
+        const result = await c.newTab(url);
         success(`Opened new tab${url ? `: ${url}` : ''}`);
         output({ tabId: result.tabId });
         break;
       }
       case 'close': {
         const tabId = args[1] ? parseInt(args[1]) : undefined;
-        await client.closeTab(tabId);
+        await c.closeTab(tabId);
         success('Closed tab');
         break;
       }
       default: {
-        // Switch to tab by index
         const index = parseInt(subcommand);
         if (isNaN(index)) {
           error('Usage: fox-pilot tab [new|close|<index>]');
         }
-        const tabs = await client.getTabs();
+        const tabs = await c.getTabs();
         if (index < 0 || index >= tabs.length) {
           error(`Tab index out of range: ${index}`);
         }
-        await client.switchTab(tabs[index].id);
+        await c.switchTab(tabs[index].id);
         success(`Switched to tab ${index}`);
       }
     }
@@ -542,10 +545,10 @@ const commands = {
     const code = args.join(' ');
     if (!code) error('Usage: fox-pilot eval <javascript>');
 
-    const client = await getClient();
-    const result = await client.evaluate(code);
+    const c = await getClient();
+    const result = await c.evaluate(code);
 
-    if (result.error) {
+    if ('error' in result) {
       error(`Eval error: ${result.error.message}`);
     } else {
       output({ result: result.result });
@@ -662,9 +665,9 @@ EXAMPLES:
 // Argument Parsing
 // =============================================================================
 
-function parseArgs(argv) {
-  const args = [];
-  const flags = {};
+function parseArgs(argv: string[]): ParsedArgs {
+  const args: string[] = [];
+  const flags: Flags = {};
 
   let i = 0;
   while (i < argv.length) {
@@ -705,23 +708,22 @@ function parseArgs(argv) {
 // Main
 // =============================================================================
 
-async function main() {
+async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   const { args, flags } = parseArgs(argv);
 
-  // Global flags
-  outputJson = flags.json || false;
+  outputJson = Boolean(flags.json);
 
   const command = args[0];
   const commandArgs = args.slice(1);
 
   if (!command || command === 'help' || flags.help || flags.h) {
-    await commands.help();
+    await commands.help([], {});
     process.exit(0);
   }
 
   if (command === 'version' || flags.version || flags.v) {
-    await commands.version();
+    await commands.version([], {});
     process.exit(0);
   }
 
@@ -733,9 +735,11 @@ async function main() {
   try {
     await handler(commandArgs, flags);
   } catch (err) {
-    error(err.message);
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    error(message);
   } finally {
-    await disconnect();
+    disconnect();
+    process.exit(0);
   }
 }
 

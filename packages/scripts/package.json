@@ -1,0 +1,21 @@
+{
+  "name": "@fox-pilot/scripts",
+  "version": "0.1.0",
+  "description": "Installation scripts for Fox Pilot",
+  "type": "module",
+  "main": "./src/install-host.ts",
+  "scripts": {
+    "install": "bun run src/install-host.ts",
+    "uninstall": "bun run src/install-host.ts --uninstall"
+  },
+  "files": ["src/"],
+  "keywords": ["firefox", "native-messaging", "installer"],
+  "author": "Titouan Mathis",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@fox-pilot/native-host": "^0.1.0"
+  }
+}

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 /**
  * Install Native Messaging Host
@@ -7,21 +7,29 @@
  * for the current operating system.
  */
 
-import { writeFileSync, mkdirSync, chmodSync } from 'fs';
-import { dirname, join, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { writeFileSync, mkdirSync, chmodSync, unlinkSync } from 'fs';
+import { dirname, join } from 'path';
 import { platform, homedir } from 'os';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const projectRoot = resolve(__dirname, '..');
+// Resolve the native-host package location
+const nativeHostPkgPath = require.resolve('@fox-pilot/native-host/package.json');
+const nativeHostDir = dirname(nativeHostPkgPath);
 
 const HOST_NAME = 'fox_pilot';
 const EXTENSION_ID = 'fox-pilot@ikko.fr';
 
+interface NativeHostManifest {
+  name: string;
+  description: string;
+  path: string;
+  type: 'stdio';
+  allowed_extensions: string[];
+}
+
 /**
  * Get the native messaging hosts directory for the current OS
  */
-function getNativeHostsDir() {
+function getNativeHostsDir(): string {
   const os = platform();
 
   switch (os) {
@@ -30,7 +38,6 @@ function getNativeHostsDir() {
     case 'linux':
       return join(homedir(), '.mozilla/native-messaging-hosts');
     case 'win32':
-      // Windows uses registry, but we can also use the AppData location
       return join(process.env.APPDATA || '', 'Mozilla', 'NativeMessagingHosts');
     default:
       throw new Error(`Unsupported platform: ${os}`);
@@ -40,10 +47,9 @@ function getNativeHostsDir() {
 /**
  * Create the native messaging host manifest
  */
-function createManifest() {
-  // Use shell wrapper on macOS/Linux for proper Node.js execution
-  const hostFile = platform() === 'win32' ? 'host.js' : 'host.sh';
-  const hostPath = join(projectRoot, 'native-host', hostFile);
+function createManifest(): NativeHostManifest {
+  // Use compiled binary
+  const hostPath = join(nativeHostDir, 'dist', 'fox-pilot-host');
 
   return {
     name: HOST_NAME,
@@ -57,7 +63,7 @@ function createManifest() {
 /**
  * Install the native messaging host
  */
-function install() {
+function install(): void {
   console.log('Installing Fox Pilot native messaging host...\n');
 
   const hostsDir = getNativeHostsDir();
@@ -69,7 +75,7 @@ function install() {
     mkdirSync(hostsDir, { recursive: true });
     console.log(`✓ Created directory: ${hostsDir}`);
   } catch (error) {
-    if (error.code !== 'EEXIST') {
+    if ((error as NodeJS.ErrnoException).code !== 'EEXIST') {
       throw error;
     }
   }
@@ -78,14 +84,14 @@ function install() {
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
   console.log(`✓ Written manifest: ${manifestPath}`);
 
-  // Make host.js executable (Unix only)
+  // Make host.sh executable (Unix only)
   if (platform() !== 'win32') {
     const hostPath = manifest.path;
     try {
       chmodSync(hostPath, 0o755);
       console.log(`✓ Made executable: ${hostPath}`);
     } catch (error) {
-      console.warn(`⚠ Could not make executable: ${error.message}`);
+      console.warn(`⚠ Could not make executable: ${(error as Error).message}`);
     }
   }
 
@@ -100,16 +106,14 @@ function install() {
   console.log('\n✅ Installation complete!\n');
   console.log('Next steps:');
   console.log('1. Load the extension in Firefox (about:debugging)');
-  console.log('2. Select extension/manifest.json');
+  console.log('2. Select packages/extension/src/manifest.json');
   console.log('3. The native host will start automatically');
 }
 
 /**
  * Uninstall the native messaging host
  */
-async function uninstall() {
-  const { unlinkSync } = await import('fs');
-
+function uninstall(): void {
   console.log('Uninstalling Fox Pilot native messaging host...\n');
 
   const hostsDir = getNativeHostsDir();
@@ -119,7 +123,7 @@ async function uninstall() {
     unlinkSync(manifestPath);
     console.log(`✓ Removed manifest: ${manifestPath}`);
   } catch (error) {
-    if (error.code === 'ENOENT') {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       console.log(`⚠ Manifest not found: ${manifestPath}`);
     } else {
       throw error;
@@ -133,7 +137,7 @@ async function uninstall() {
 const args = process.argv.slice(2);
 
 if (args.includes('--uninstall') || args.includes('-u')) {
-  await uninstall();
+  uninstall();
 } else {
   install();
 }
