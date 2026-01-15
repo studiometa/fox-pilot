@@ -8,8 +8,8 @@
     "fox-pilot-install": "./src/install-host"
   },
   "scripts": {
-    "install": "node src/install-host",
-    "uninstall": "node src/install-host --uninstall"
+    "install": "node --experimental-strip-types src/install-host",
+    "uninstall": "node --experimental-strip-types src/install-host --uninstall"
   },
   "files": ["src/"],
   "keywords": ["firefox", "native-messaging", "installer"],
