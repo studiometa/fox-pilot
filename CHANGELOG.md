@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Switch to npm trusted publishing via OIDC ([7df7e34](https://github.com/studiometa/fox-pilot/commit/7df7e34))
+- Add Node 24 setup in CI for TypeScript support ([9cd0329](https://github.com/studiometa/fox-pilot/commit/9cd0329))
 
 ### Fixed
 
