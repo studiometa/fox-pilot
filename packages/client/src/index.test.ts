@@ -101,7 +101,7 @@ describe('FoxPilotClient', () => {
 
       // Simulate auth response
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
@@ -112,7 +112,7 @@ describe('FoxPilotClient', () => {
       await connectPromise;
 
       expect(mockWsInstance!.sentMessages).toHaveLength(1);
-      const sentAuth = JSON.parse(mockWsInstance!.sentMessages[0]);
+      const sentAuth = JSON.parse(mockWsInstance!.sentMessages[0]!);
       expect(sentAuth.method).toBe('auth');
       expect(sentAuth.params.token).toBe('test-token');
     });
@@ -124,7 +124,7 @@ describe('FoxPilotClient', () => {
       await vi.waitFor(() => expect(mockWsInstance).not.toBeNull());
 
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
@@ -157,7 +157,7 @@ describe('FoxPilotClient', () => {
       await vi.waitFor(() => expect(mockWsInstance).not.toBeNull());
 
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
@@ -187,7 +187,7 @@ describe('FoxPilotClient', () => {
       await vi.waitFor(() => expect(mockWsInstance).not.toBeNull());
 
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
@@ -203,7 +203,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sentMessage = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sentMessage = JSON.parse(mockWsInstance!.sentMessages[1]!);
       mockWsInstance!.receiveMessage({
         id: sentMessage.id,
         success: true,
@@ -219,7 +219,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sentMessage = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sentMessage = JSON.parse(mockWsInstance!.sentMessages[1]!);
       mockWsInstance!.receiveMessage({
         id: sentMessage.id,
         success: false,
@@ -240,7 +240,7 @@ describe('FoxPilotClient', () => {
       await vi.waitFor(() => expect(mockWsInstance).not.toBeNull());
 
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
@@ -256,7 +256,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('navigate');
       expect(sent.params.url).toBe('https://example.com');
 
@@ -269,7 +269,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('back');
 
       mockWsInstance!.receiveMessage({ id: sent.id, success: true, result: { success: true } });
@@ -281,7 +281,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('forward');
 
       mockWsInstance!.receiveMessage({ id: sent.id, success: true, result: { success: true } });
@@ -293,7 +293,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('reload');
 
       mockWsInstance!.receiveMessage({ id: sent.id, success: true, result: { success: true } });
@@ -311,7 +311,7 @@ describe('FoxPilotClient', () => {
       await vi.waitFor(() => expect(mockWsInstance).not.toBeNull());
 
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
@@ -327,7 +327,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('click');
       expect(sent.params.selector).toBe('#button');
 
@@ -340,7 +340,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('type');
       expect(sent.params.selector).toBe('#input');
       expect(sent.params.text).toBe('hello');
@@ -354,7 +354,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('fill');
       expect(sent.params.selector).toBe('#input');
       expect(sent.params.text).toBe('hello');
@@ -368,7 +368,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('hover');
       expect(sent.params.selector).toBe('#element');
 
@@ -387,7 +387,7 @@ describe('FoxPilotClient', () => {
       await vi.waitFor(() => expect(mockWsInstance).not.toBeNull());
 
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
@@ -403,7 +403,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('getText');
 
       mockWsInstance!.receiveMessage({
@@ -421,7 +421,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('getUrl');
 
       mockWsInstance!.receiveMessage({
@@ -439,7 +439,7 @@ describe('FoxPilotClient', () => {
 
       await vi.waitFor(() => expect(mockWsInstance!.sentMessages.length).toBeGreaterThan(1));
 
-      const sent = JSON.parse(mockWsInstance!.sentMessages[1]);
+      const sent = JSON.parse(mockWsInstance!.sentMessages[1]!);
       expect(sent.method).toBe('getTitle');
 
       mockWsInstance!.receiveMessage({
@@ -464,7 +464,7 @@ describe('FoxPilotClient', () => {
       await vi.waitFor(() => expect(mockWsInstance).not.toBeNull());
 
       setTimeout(() => {
-        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]);
+        const authMessage = JSON.parse(mockWsInstance!.sentMessages[0]!);
         mockWsInstance!.receiveMessage({
           id: authMessage.id,
           success: true,
