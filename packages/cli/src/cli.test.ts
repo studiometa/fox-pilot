@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseArgs } from './cli';
+import { parseArgs } from './args.ts';
 
 describe('parseArgs', () => {
   describe('positional arguments', () => {
