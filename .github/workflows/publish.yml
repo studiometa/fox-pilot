@@ -101,6 +101,9 @@ jobs:
         env:
           NODE_OPTIONS: --experimental-strip-types
 
+      - name: Build client and CLI
+        run: bun run build
+
       - name: Determine npm tag
         run: |
           NPM_TAG='latest'
