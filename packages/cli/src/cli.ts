@@ -15,10 +15,10 @@
  */
 
 import { FoxPilotClient } from '@fox-pilot/client';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, chmodSync, unlinkSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-import { platform, homedir, arch } from 'os';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, chmodSync, unlinkSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { platform, homedir, arch } from 'node:os';
 
 // =============================================================================
 // Types
