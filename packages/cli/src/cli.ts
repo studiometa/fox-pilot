@@ -15,7 +15,7 @@
  */
 
 import { FoxPilotClient } from '@fox-pilot/client';
-import { writeFileSync, existsSync, mkdirSync, chmodSync, unlinkSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, chmodSync, unlinkSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { platform, homedir, arch } from 'os';
@@ -35,7 +35,9 @@ interface ParsedArgs {
 // Configuration
 // =============================================================================
 
-const VERSION = '1.0.0';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'));
+const VERSION = pkg.version;
 const HOST_NAME = 'fox_pilot';
 const EXTENSION_ID = 'fox-pilot@ikko.fr';
 
@@ -72,7 +74,6 @@ function getPlatformPackage(): string {
 function findBinaryPath(): string {
   const platformPkg = getPlatformPackage();
   const platformDir = platformPkg.replace('@fox-pilot/', '');
-  const __dirname = dirname(fileURLToPath(import.meta.url));
 
   // Try to find the platform-specific package via import.meta.resolve
   try {
