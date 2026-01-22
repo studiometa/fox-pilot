@@ -10,7 +10,7 @@ Firefox extension enabling remote browser control by coding agents (Claude, Curs
 - **Style**: Imperative mood, capitalize first letter (e.g., "Add feature", "Fix bug")
 - **AI commits**: Always include `Co-authored-by: Claude <claude@anthropic.com>` trailer
 - **Atomic commits**: One logical change per commit
-- **Releases**: Always run `bun run lint && bun run typecheck && bun run test` before creating the release tag and pushing
+- **Releases**: Always run `npm run lint && npm run typecheck && npm run test` before creating the release tag and pushing
 
 ## Project Structure
 
@@ -53,40 +53,40 @@ fox-pilot/
 
 - **CLI/Client**: Node.js 24+ (compiled to JavaScript via Vite for npm distribution)
 - **Native Host**: Compiled binary (no runtime needed)
-- **Development**: Bun (for building binaries, running tests)
+- **Development**: Node.js 24+ (see `.nvmrc`)
 
 ## Development
 
 ```bash
 # Install dependencies
-bun install
+npm install
 
 # Build native host binary (for local development)
-bun run build:host
+npm run build:host
 
 # Install native host (registers with Firefox)
-bun run install-host
+npm run install-host
 
 # Load extension in Firefox
 # 1. Go to about:debugging#/runtime/this-firefox
 # 2. Load packages/extension/src/manifest.json
 
 # Build client and CLI (required before publishing)
-bun run build
+npm run build
 
 # Run CLI in development (from source)
-bun run packages/cli/src/cli.ts help
+node packages/cli/src/cli.ts help
 
 # Run CLI from built output
 node packages/cli/dist/cli.js help
 
 # Run tests
-bun run test
-bun run test:watch
+npm run test
+npm run test:watch
 
 # Lint and type check
-bun run lint
-bun run typecheck
+npm run lint
+npm run typecheck
 ```
 
 ## Architecture Notes
