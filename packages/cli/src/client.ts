@@ -17,7 +17,13 @@ export async function getClient(): Promise<FoxPilotClient> {
     return client;
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
-    error(`Failed to connect to Fox Pilot: ${message}. Is the extension running?`);
+    error(
+      `Failed to connect to Fox Pilot: ${message}\n\n` +
+      `Troubleshooting:\n` +
+      `  1. Run 'fox-pilot install' to install the native messaging host\n` +
+      `  2. Install the Firefox extension: https://addons.mozilla.org/firefox/addon/fox-pilot/\n` +
+      `  3. Make sure Firefox is running with the extension enabled`
+    );
   }
 }
 
