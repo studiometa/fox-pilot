@@ -24,10 +24,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "version:patch": "npm version patch --no-git-tag-version && npm version patch --no-git-tag-version --workspaces && npm run version:sync-manifest",
-    "version:minor": "npm version minor --no-git-tag-version && npm version minor --no-git-tag-version --workspaces && npm run version:sync-manifest",
-    "version:major": "npm version major --no-git-tag-version && npm version major --no-git-tag-version --workspaces && npm run version:sync-manifest",
-    "version:sync-manifest": "node -e \"const fs = require('fs'); const pkg = require('./package.json'); const m = 'packages/extension/src/manifest.json'; const manifest = JSON.parse(fs.readFileSync(m)); manifest.version = pkg.version; fs.writeFileSync(m, JSON.stringify(manifest, null, 2) + '\\n');\""
+    "version:patch": "npm version patch --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:major": "npm version major --no-git-tag-version",
+    "postversion": "node scripts/version-sync.js"
   },
   "keywords": [
     "firefox",

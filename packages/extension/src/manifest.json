@@ -1,15 +1,13 @@
 {
   "manifest_version": 2,
   "name": "Fox Pilot",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Remote browser control for coding agents",
   "author": "Titouan Mathis",
-
   "icons": {
     "48": "icons/icon-48.png",
     "96": "icons/icon-96.png"
   },
-
   "permissions": [
     "tabs",
     "activeTab",
@@ -18,20 +16,23 @@
     "nativeMessaging",
     "<all_urls>"
   ],
-
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": true
   },
-
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
-
   "browser_action": {
     "default_icon": {
       "48": "icons/icon-48.png",
@@ -40,13 +41,14 @@
     "default_title": "Fox Pilot",
     "default_popup": "popup/popup.html"
   },
-
   "browser_specific_settings": {
     "gecko": {
       "id": "fox-pilot@ikko.fr",
       "strict_min_version": "140.0",
       "data_collection_permissions": {
-        "required": ["none"],
+        "required": [
+          "none"
+        ],
         "optional": []
       }
     }
