@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## v0.3.3 - 2026.01.22
+
+### Added
+
+- Add Node.js version check with clear error message ([4cd5209](https://github.com/studiometa/fox-pilot/commit/4cd5209))
+
+### Changed
+
+- Use `fox-pilot@version` format in CLI output ([a7f6c61](https://github.com/studiometa/fox-pilot/commit/a7f6c61))
+- Improve CLI connection error message ([8ec2eb9](https://github.com/studiometa/fox-pilot/commit/8ec2eb9))
+- Update install command output to link to Firefox addon store ([fa82f67](https://github.com/studiometa/fox-pilot/commit/fa82f67))
+- Replace bun with npm in package.json scripts ([2290d47](https://github.com/studiometa/fox-pilot/commit/2290d47))
+- Use `file:` protocol for optional dependencies in local development ([f4b908d](https://github.com/studiometa/fox-pilot/commit/f4b908d))
+
+### Fixed
+
+- Fix install command in skill documentation ([db8569f](https://github.com/studiometa/fox-pilot/commit/db8569f))
+
+### Removed
+
+- Remove postinstall script from CLI package ([d7156c7](https://github.com/studiometa/fox-pilot/commit/d7156c7))
+
 ## v0.3.2 - 2026.01.15
 
 ### Fixed

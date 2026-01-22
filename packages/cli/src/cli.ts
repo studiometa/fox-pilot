@@ -17,7 +17,7 @@
 // =============================================================================
 
 const MIN_NODE_VERSION = 24;
-const nodeVersion = parseInt(process.versions.node.split('.')[0], 10);
+const nodeVersion = parseInt(process.versions.node.split('.')[0] ?? '0', 10);
 
 if (nodeVersion < MIN_NODE_VERSION) {
   console.error(`✗ Node.js ${MIN_NODE_VERSION}+ is required (current: ${process.versions.node})\n`);
