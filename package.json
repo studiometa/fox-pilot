@@ -8,9 +8,6 @@
     "packages/client",
     "packages/cli",
     "packages/native-host",
-    "packages/native-host-darwin-arm64",
-    "packages/native-host-darwin-x64",
-    "packages/native-host-linux-x64",
     "packages/extension"
   ],
   "scripts": {
@@ -50,7 +47,7 @@
     "node": ">=24.0.0"
   },
   "devDependencies": {
-    "bun-types": "latest",
+    "@types/bun": "^1.3.6",
     "typescript": "^5.0.0",
     "vite": "^8.0.0-beta.8",
     "vitest": "^4.0.17"

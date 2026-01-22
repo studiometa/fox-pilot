@@ -7,11 +7,12 @@
     "fox-pilot": "./dist/cli.js"
   },
   "files": [
-    "dist/",
-    "scripts/"
+    "dist/"
   ],
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "prepublishOnly": "npm run build && node scripts/prepare-publish.js",
+    "postpublish": "node scripts/restore-package.js"
   },
   "keywords": [
     "firefox",
@@ -30,9 +31,9 @@
     "@fox-pilot/client": "^0.3.0"
   },
   "optionalDependencies": {
-    "@fox-pilot/native-host-darwin-arm64": "^0.3.0",
-    "@fox-pilot/native-host-darwin-x64": "^0.3.0",
-    "@fox-pilot/native-host-linux-x64": "^0.3.0"
+    "@fox-pilot/native-host-darwin-arm64": "file:../native-host-darwin-arm64",
+    "@fox-pilot/native-host-darwin-x64": "file:../native-host-darwin-x64",
+    "@fox-pilot/native-host-linux-x64": "file:../native-host-linux-x64"
   },
   "repository": {
     "type": "git",
