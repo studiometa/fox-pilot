@@ -61,7 +61,7 @@ function main() {
     });
 
     console.log(`✓ Installed ${pkg}`);
-  } catch (err) {
+  } catch {
     console.error(`⚠ Failed to install ${pkg}. Run manually:`);
     console.error(`  npm install -g ${pkg}`);
   }
