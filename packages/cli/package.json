@@ -11,8 +11,7 @@
     "scripts/"
   ],
   "scripts": {
-    "build": "vite build",
-    "postinstall": "node scripts/postinstall.js"
+    "build": "vite build"
   },
   "keywords": [
     "firefox",
