@@ -15,23 +15,17 @@ jobs:
         with:
           node-version: 24
 
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
       - name: Install dependencies
-        run: bun install
-        env:
-          NODE_OPTIONS: --experimental-strip-types
+        run: npm install
 
       - name: Type check
-        run: bun run typecheck
+        run: npm run typecheck
 
       - name: Lint
-        run: bun run lint
+        run: npm run lint
 
       - name: Test
-        run: bun run test
+        run: npm run test
 
   build:
     needs: test
@@ -97,12 +91,10 @@ jobs:
           chmod +x packages/native-host-*/bin/fox-pilot-host
 
       - name: Install dependencies
-        run: bun install
-        env:
-          NODE_OPTIONS: --experimental-strip-types
+        run: npm install
 
       - name: Build client and CLI
-        run: bun run build
+        run: npm run build
 
       - name: Determine npm tag
         run: |
