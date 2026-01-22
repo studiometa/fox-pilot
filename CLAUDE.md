@@ -10,6 +10,7 @@ Firefox extension enabling remote browser control by coding agents (Claude, Curs
 - **Style**: Imperative mood, capitalize first letter (e.g., "Add feature", "Fix bug")
 - **AI commits**: Always include `Co-authored-by: Claude <claude@anthropic.com>` trailer
 - **Atomic commits**: One logical change per commit
+- **Releases**: Always run `bun run lint && bun run typecheck && bun run test` before creating the release tag and pushing
 
 ## Project Structure
 
