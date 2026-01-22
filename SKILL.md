@@ -12,16 +12,14 @@ CLI-based Firefox browser automation optimized for AI agents. Simple commands, p
 ## Setup
 
 ```bash
-# Install the package
-npm install -g fox-pilot
+# Install the CLI globally
+npm install -g @fox-pilot/cli
 
 # Install native messaging host (run once)
-fox-pilot install-host
+fox-pilot install
 
-# Load extension in Firefox
-# 1. Go to about:debugging#/runtime/this-firefox
-# 2. Click "Load Temporary Add-on"
-# 3. Select extension/manifest.json
+# Install Firefox extension from:
+# https://addons.mozilla.org/firefox/addon/fox-pilot/
 ```
 
 ## Quick Start
@@ -249,7 +247,7 @@ lsof -i :9222
 tail -f /tmp/fox-pilot.log
 
 # Reinstall native host
-fox-pilot install-host
+fox-pilot install
 
 # Reload extension
 # Go to about:debugging#/runtime/this-firefox and click "Reload"
