@@ -8,7 +8,7 @@ export const VERSION = typeof __CLI_VERSION__ !== 'undefined' ? __CLI_VERSION__ 
 
 export async function help(): Promise<void> {
   console.log(`
-Fox Pilot CLI v${VERSION}
+fox-pilot@${VERSION}
 Browser automation for AI agents via Firefox
 
 USAGE:
@@ -108,5 +108,5 @@ EXAMPLES:
 }
 
 export async function version(): Promise<void> {
-  console.log(`Fox Pilot CLI v${VERSION}`);
+  console.log(`fox-pilot@${VERSION}`);
 }
