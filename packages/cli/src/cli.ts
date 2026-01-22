@@ -12,6 +12,26 @@
  * fox-pilot screenshot /tmp/page.png
  */
 
+// =============================================================================
+// Node Version Check
+// =============================================================================
+
+const MIN_NODE_VERSION = 24;
+const nodeVersion = parseInt(process.versions.node.split('.')[0], 10);
+
+if (nodeVersion < MIN_NODE_VERSION) {
+  console.error(`✗ Node.js ${MIN_NODE_VERSION}+ is required (current: ${process.versions.node})\n`);
+  console.error(`Fox Pilot uses modern JavaScript features that require Node.js ${MIN_NODE_VERSION}+:`);
+  console.error(`  - Native WebSocket client (no external dependencies)`);
+  console.error(`  - Import attributes for JSON modules`);
+  console.error(`\nUpgrade Node.js: https://nodejs.org/`);
+  process.exit(1);
+}
+
+// =============================================================================
+// Imports
+// =============================================================================
+
 import { parseArgs } from './args.ts';
 import { commands } from './commands/index.ts';
 import { disconnect } from './client.ts';
