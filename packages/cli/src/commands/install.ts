@@ -144,9 +144,9 @@ export async function install(): Promise<void> {
 
   console.log('\n✅ Installation complete!\n');
   console.log('Next steps:');
-  console.log('1. Load the extension in Firefox (about:debugging)');
-  console.log('2. Select packages/extension/src/manifest.json');
-  console.log('3. The native host will start automatically');
+  console.log('1. Install the Firefox extension from:');
+  console.log('   https://addons.mozilla.org/firefox/addon/fox-pilot/');
+  console.log('2. The native host will start automatically when you use fox-pilot');
 }
 
 export async function uninstall(): Promise<void> {
